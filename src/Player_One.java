@@ -63,8 +63,18 @@ public class Player_One extends Player{
         		setImage("idleLeft");
         	}
         }
+        
+        //POWER UPS
+        
 
 	}
+	
+	public void powerUp() {
+		projectileImage = "powerUpWeapon.png";
+		leftProjectileImage = "Aircutter-left.png"; //CHANGE IMAGES
+		setMeleeDamage(50);
+	}
+	
 	@Override
 	public void setImage(String str) {
 		switch (str) {
