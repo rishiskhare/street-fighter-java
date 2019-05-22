@@ -2,9 +2,9 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.input.KeyCode;
 
 public class Player_Two extends Player{
-	private int speed = 4;
+	private int speed = 2;
 	public Player_Two(int xPos,int yPos) {
-		super(150,8,2,"cow.png", false, 4);
+		super(150,10,2,"cow.png", false, 5);
 		setImage("idleLeft");
 		projectileImage = "throwingAxe.png";
 		leftProjectileImage = "throwingAxe-left.png";
@@ -13,10 +13,16 @@ public class Player_Two extends Player{
 	}
 	@Override
 	public void act(long now) {
+		if(getX()> 1100) {
+			setX(-100);			
+		}
+		if(getX()<-200) {
+    		setX(1000);
+		}
 		if(getOneIntersectingObject(Player.class)!=null) {
-			speed = 2;
+			speed = 1;
 		}else {
-			speed = 5;
+			speed = 2;
 		}
 		move(dx,dy);
 		if(dx!=0) {
@@ -30,9 +36,6 @@ public class Player_Two extends Player{
 			dy = 0;
 		}
 		if(getWorld().isKeyDown(KeyCode.RIGHT)){
-			if(getX()> 910) {
-				return;
-			}
 			if(getY()>=250&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
 				setImage("run");
 			}
@@ -40,9 +43,6 @@ public class Player_Two extends Player{
             setDirection(true);
         }
         if (getWorld().isKeyDown(KeyCode.LEFT)) {
-        	if(getX()<4) {
-				return;
-			}
         	if(getY()>=250&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
         		setImage("runLeft");
         	}
