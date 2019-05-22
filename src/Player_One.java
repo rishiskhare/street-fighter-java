@@ -18,7 +18,12 @@ public class Player_One extends Player{
 	
 	@Override
 	public void act(long now) {		
-		
+		if(getX()> 1100) {
+			setX(-100);			
+		}
+		if(getX()<-200) {
+    		setX(1000);
+		}
 		if(getOneIntersectingObject(Player.class)!=null) {
 			speed = 5;
 		}else {
@@ -37,9 +42,6 @@ public class Player_One extends Player{
 			dy = 0;
 		}
 		if(getWorld().isKeyDown(KeyCode.D)) {
-			if(getX()> 910) {
-				return;
-			}
 			if(getY()>=250&&!getWorld().isKeyDown(KeyCode.F)&&!getWorld().isKeyDown(KeyCode.E)) {
 				setImage("run");
 			}
@@ -47,9 +49,6 @@ public class Player_One extends Player{
             setDirection(true);
         }
         if (getWorld().isKeyDown(KeyCode.A)) {
-        	if(getX()<4) {
-				return;
-			}
         	if(getY()>=250&&!getWorld().isKeyDown(KeyCode.F)&&!getWorld().isKeyDown(KeyCode.E)) {
         		setImage("runLeft");
         	}
@@ -105,7 +104,12 @@ public class Player_One extends Player{
 		case "shootLeft":
 			this.setViewport(new Rectangle2D(150, 0, 150, 145));
 			break;
-			
+		case "hurt":
+			this.setViewport(new Rectangle2D(600, 0, 150, 145));
+			break;
+		case "hurtLeft":
+			this.setViewport(new Rectangle2D(750, 0, 150, 145));
+			break;
 		}
 	}
 
