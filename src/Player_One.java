@@ -1,5 +1,5 @@
 import javafx.geometry.Rectangle2D;
-import javafx.scene.image.Image;
+//import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
 public class Player_One extends Player{

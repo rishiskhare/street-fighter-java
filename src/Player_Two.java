@@ -65,8 +65,7 @@ public class Player_Two extends Player{
 	}
 	
 	public void weaponPowerUp() {
-		setMeleeDamage(20);
-		setImage("attackLeft");
+		setMeleeDamage(50);
 	}
 	
 	@Override
