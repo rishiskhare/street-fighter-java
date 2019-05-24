@@ -72,11 +72,12 @@ public class Player_One extends Player{
 	}
 	
 	//POWER UPS
-	public void powerUp() {
+	public void powerUp() {	
 		projectileImage = "PowerUp.png";
 		leftProjectileImage = "PowerUpLeft.png";
 		setMeleeDamage(50);
 		poweredUp = true;
+		
 	}
 	
 	@Override
@@ -159,10 +160,15 @@ public class Player_One extends Player{
 			this.setViewport(new Rectangle2D(750, 0, 150, 145));
 			break;
 		case "powerUp":
-			this.setViewport(new Rectangle2D(0, 0, 150, 145)); //why isnt this working?
+			Image im = new Image ("PowerUp.png");
+			this.setImage(im);
+			System.out.println("powered up");
 			break;
 		case "powerUpLeft":
-			this.setViewport(new Rectangle2D(150, 0, 150, 145));
+			Image imLeft = new Image ("PowerUpLeft.png");
+			this.setImage(imLeft);
+			System.out.println("powered up(L)");
+			
 			break;
 		}
 	}
