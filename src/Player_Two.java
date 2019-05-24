@@ -2,7 +2,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.input.KeyCode;
 
 public class Player_Two extends Player{
-	private int speed = 2;
+	private int speed = 10;
 	public Player_Two(int xPos,int yPos) {
 		super(150,10,2,"cow.png", false, 5);
 		setImage("idleLeft");

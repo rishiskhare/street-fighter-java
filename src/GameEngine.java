@@ -183,6 +183,10 @@ public class GameEngine extends Application {
 
 	public static void updatePlayerTwoHealth() {
 		iceCreamHealth.setText("Health: " + playerTwo.getHealth());
+		if(playerTwo.getHealth() <= 80) {
+			playerOne.powerUp();
+			System.out.println("updated");
+		}
 		if (playerTwo.getHealth() <= 0) {
 			Media hurt = new Media(new File("deathSoundEffect.mp3").toURI().toString());
 			sound = new MediaPlayer(hurt);
