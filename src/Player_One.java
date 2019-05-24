@@ -1,6 +1,7 @@
 import javafx.geometry.Rectangle2D;
 //import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.image.Image;
 
 public class Player_One extends Player{
 	private int speed = 5;
