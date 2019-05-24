@@ -1,18 +1,27 @@
+import java.io.File;
+
 import javafx.geometry.Rectangle2D;
 import javafx.scene.input.KeyCode;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class Player_Two extends Player{
 	private int speed = 2;
+	private static MediaPlayer sound = null;
 	public Player_Two(int xPos,int yPos) {
-		super(150,10,2,"cow.png", false, 5);
+		super(10,8,4,"cow.png", false, 5);
 		setImage("idleLeft");
+		groundHeight = yPos;
 		projectileImage = "throwingAxe.png";
 		leftProjectileImage = "throwingAxe-left.png";
 		setX(xPos);
 		setY(yPos);
+		setFitWidth(240);
+		setFitHeight(230);
 	}
 	@Override
 	public void act(long now) {
+		bulletHeight = (int) (getY() +95);
 		if(getX()> 1100) {
 			setX(-100);			
 		}
@@ -30,33 +39,38 @@ public class Player_Two extends Player{
 				dx = 0;
 			}
 		}
-		if(this.getY() < 250){
+		if(this.getY() < groundHeight){
 			dy = dy + 0.15;
 		}else{
 			dy = 0;
 		}
 		if(getWorld().isKeyDown(KeyCode.RIGHT)){
-			if(getY()>=250&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
+			if(getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
 				setImage("run");
 			}
             move(speed,0);  
             setDirection(true);
         }
         if (getWorld().isKeyDown(KeyCode.LEFT)) {
-        	if(getY()>=250&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
+        	if(getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
         		setImage("runLeft");
         	}
         	move(-speed,0); 
         	setDirection(false);
         } 
         if(!getWorld().isKeyDown(KeyCode.LEFT)&&!getWorld().isKeyDown(KeyCode.RIGHT)&&!getWorld().isKeyDown(KeyCode.O)&&
-        		getY()>=250&&!getWorld().isKeyDown(KeyCode.P)){
+        		getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.P)){
         	if(getDirection()) {
         		setImage("idle");
         	}else if(!getDirection()) {
         		setImage("idleLeft");
         	}
         }
+	}
+	public void playAttackSound() {
+		Media hurt = new Media(new File("minotaurAttackSound.mp3").toURI().toString());
+		sound = new MediaPlayer(hurt);
+		sound.play();		
 	}
 	@Override
 	public void setImage(String str) {
