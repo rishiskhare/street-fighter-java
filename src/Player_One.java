@@ -95,6 +95,7 @@ public class Player_One extends Player{
 		leftProjectileImage = "PowerUpLeft.png";
 		setMeleeDamage(50);
 		poweredUp = true;
+		System.out.println("in power up method");
 		
 	}
 	
@@ -178,12 +179,12 @@ public class Player_One extends Player{
 			this.setViewport(new Rectangle2D(750, 0, 150, 145));
 			break;
 		case "powerUp":
-			Image im = new Image ("PowerUp.png");
+			Image im = new Image ("UpdatedPlayer1Right.png");
 			this.setImage(im);
 			System.out.println("powered up");
 			break;
 		case "powerUpLeft":
-			Image imLeft = new Image ("PowerUpLeft.png");
+			Image imLeft = new Image ("UpdatedPlayer1Left.png");
 			this.setImage(imLeft);
 			System.out.println("powered up(L)");
 			

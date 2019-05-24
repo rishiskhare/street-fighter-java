@@ -9,7 +9,7 @@ public class Player_Two extends Player{
 	private int speed = 2;
 	private static MediaPlayer sound = null;
 	public Player_Two(int xPos,int yPos) {
-		super(10,8,4,"cow.png", false, 5);
+		super(150,8,4,"cow.png", false, 5);
 		setImage("idleLeft");
 		groundHeight = yPos;
 		projectileImage = "throwingAxe.png";

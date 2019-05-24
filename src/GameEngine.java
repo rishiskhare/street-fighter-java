@@ -168,6 +168,8 @@ public class GameEngine extends Application {
 		playerTwo.setY(185);
 		playerOne.setHealth(100);
 		playerTwo.setHealth(150);
+		playerOne.setMeleeDamage(6);
+		playerTwo.setMeleeDamage(8);
 		updatePlayerOneHealth();
 		updatePlayerTwoHealth();
 		root.getChildren().remove(restartBox);
@@ -231,7 +233,7 @@ public class GameEngine extends Application {
 		if (playerTwo.getHealth() <= 0 && gameOver) {
 
 			playerTwoHealth.setText("Health: " + playerTwo.getHealth());
-			if(playerTwo.getHealth() <= 80) {
+			if(playerTwo.getHealth() <= 100) {
 				playerOne.powerUp();
 				System.out.println("updated");
 			}
