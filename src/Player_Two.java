@@ -70,10 +70,6 @@ public class Player_Two extends Player{
         	}
         }
 
-		if (getHealth() < 80) {
-			weaponPowerUp();
-		}
-
 	}
 
 	public void playAttackSound() {
@@ -82,9 +78,23 @@ public class Player_Two extends Player{
 		sound.play();		
 	}
 	
-	public void weaponPowerUp() {
+	public void playerPowerUp() {
 		setMeleeDamage(50);
+		if (getDirection()) {
+			setImage("powerUpP2Right");
+		} else {
+			setImage("powerUpP2Left");
+		}
 	}
+	
+	@Override
+	public void attack() {
+		Player p1 = this.getOneIntersectingObject(Player.class);
+		if (p1.getHealth() < 80) {
+			playerPowerUp();
+		}
+	}
+	
 	
 	@Override
 	public void setImage(String str) {
