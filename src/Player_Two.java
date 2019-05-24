@@ -6,7 +6,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 public class Player_Two extends Player{
-	private int speed = 2;
+	private int speed = 5;
 	private static MediaPlayer sound = null;
 	public Player_Two(int xPos,int yPos) {
 		super(150,8,4,"cow.png", false, 5);
@@ -70,10 +70,6 @@ public class Player_Two extends Player{
         	}
         }
 
-		if (getHealth() < 80) {
-			weaponPowerUp();
-		}
-
 	}
 
 	public void playAttackSound() {
@@ -82,9 +78,23 @@ public class Player_Two extends Player{
 		sound.play();		
 	}
 	
-	public void weaponPowerUp() {
+	public void playerPowerUp() {
 		setMeleeDamage(50);
+		if (getDirection()) {
+			setImage("powerUpP2Right");
+		} else {
+			setImage("powerUpP2Left");
+		}
 	}
+	
+	@Override
+	public void attack() {
+		Player p1 = this.getOneIntersectingObject(Player.class);
+		if (p1.getHealth() < 80) {
+			playerPowerUp();
+		}
+	}
+	
 	
 	@Override
 	public void setImage(String str) {
