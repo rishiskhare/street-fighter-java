@@ -1,12 +1,18 @@
 import java.io.File;
+import java.util.TimerTask;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -18,12 +24,17 @@ import javafx.scene.media.MediaPlayer;
 
 public class GameEngine extends Application {
 	private static Player_One playerOne = new Player_One(200, 250);
-	private static Player_Two playerTwo = new Player_Two(600, 250);
-	public static Text cupcakeHealth;
-	public static Text iceCreamHealth;
+	private static Player_Two playerTwo = new Player_Two(600, 185);
+	public static Text playeOneHealth;
+	public static Text playerTwoHealth;
 	private static MediaPlayer sound = null;
 	private static Scene scene;
-
+	public static boolean gameOver = true;
+	public static Button restartButton;
+	public static BorderPane root;
+	static HBox restartBox;
+	static Text winText;
+	Text time;
 	public static void main(String[] args) {
 		launch();
 	}
@@ -32,21 +43,21 @@ public class GameEngine extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		stage.setTitle("Food Fighter");
-		BorderPane root = new BorderPane();
+		stage.setTitle("Labrynith");
+		root = new BorderPane();
 		scene = new Scene(root, 1000, 500);
 
-		cupcakeHealth = new Text("Health: " + playerOne.getHealth());
-		cupcakeHealth.setFill(Color.LIGHTGREEN);
-		cupcakeHealth.setFont(Font.font(java.awt.Font.SERIF, 25));
-		cupcakeHealth.setX(50);
-		cupcakeHealth.setY(30);
+		playeOneHealth = new Text("Health: " + playerOne.getHealth());
+		playeOneHealth.setFill(Color.CORNFLOWERBLUE);
+		playeOneHealth.setFont(Font.font(java.awt.Font.SERIF, 25));
+		playeOneHealth.setX(50);
+		playeOneHealth.setY(30);
 
-		iceCreamHealth = new Text("Health: " + playerTwo.getHealth());
-		iceCreamHealth.setFill(Color.MAROON);
-		iceCreamHealth.setFont(Font.font(java.awt.Font.SERIF, 25));
-		iceCreamHealth.setX(650);
-		iceCreamHealth.setY(30);
+		playerTwoHealth = new Text("Health: " + playerTwo.getHealth());
+		playerTwoHealth.setFill(Color.MAROON);
+		playerTwoHealth.setFont(Font.font(java.awt.Font.SERIF, 25));
+		playerTwoHealth.setX(650);
+		playerTwoHealth.setY(30);
 
 		ImageView backgroundImageView = new ImageView("ArenaBackground.jpg");
 		backgroundImageView.setFitHeight(scene.getHeight());
@@ -54,22 +65,20 @@ public class GameEngine extends Application {
 		backgroundImageView.relocate(0, 0);
 		root.getChildren().add(backgroundImageView);
 
-		
-		  
-//		Media sounds = new Media(new File("themeSong.mp3").toURI().toString()); 
-//		song= new MediaPlayer(sounds); 
-//		song.play();
-		 
+		//		Media sounds = new Media(new File("themeSong.mp3").toURI().toString()); 
+		//		song= new MediaPlayer(sounds); 
+		//		song.play();
+
 
 		fWorld.add(playerOne);
 		fWorld.add(playerTwo);
-		fWorld.add(cupcakeHealth);
-		fWorld.add(iceCreamHealth);
+		fWorld.add(playeOneHealth);
+		fWorld.add(playerTwoHealth);
 		root.getChildren().add(fWorld);
 		root.setAlignment(fWorld, Pos.CENTER);
 		stage.setScene(scene);
 		stage.show();
-		
+
 		scene.setOnKeyPressed(event -> {
 			if (event.getCode() == KeyCode.D) {
 				fWorld.addKeyCode(KeyCode.D);
@@ -100,12 +109,16 @@ public class GameEngine extends Application {
 				playerTwo.jump();
 			}
 			if (event.getCode() == KeyCode.F) {
-				fWorld.addKeyCode(KeyCode.F);
-				playerOne.attack();
+				if(!playerOne.getWorld().isKeyDown(KeyCode.F)) {
+					playerOne.attack();
+				}
+				fWorld.addKeyCode(KeyCode.F);			
 			}
 			if (event.getCode() == KeyCode.O) {
+				if(!playerOne.getWorld().isKeyDown(KeyCode.O)) {
+					playerTwo.attack();
+				}
 				fWorld.addKeyCode(KeyCode.O);	
-				playerTwo.attack();
 			}
 
 		});
@@ -144,8 +157,23 @@ public class GameEngine extends Application {
 			}
 
 		});
-		
 
+
+	}
+
+	public static void restartGame() {
+		playerOne.setX(200);
+		playerOne.setY(250);
+		playerTwo.setX(600);
+		playerTwo.setY(185);
+		playerOne.setHealth(100);
+		playerTwo.setHealth(150);
+		updatePlayerOneHealth();
+		updatePlayerTwoHealth();
+		root.getChildren().remove(restartBox);
+		fWorld.remove(winText);
+		gameOver = true;
+		fWorld.start();
 	}
 
 	public static void playHurtSound() {
@@ -153,58 +181,93 @@ public class GameEngine extends Application {
 		sound = new MediaPlayer(hurt);
 		sound.play();
 	}
-	
+
 	public static void playBulletSound() {
 		Media hurt = new Media(new File("bulletSoundEffect.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
 		sound.play();
 	}
-	
+
 	public static void updatePlayerOneHealth() {
-		cupcakeHealth.setText("Health: " + playerOne.getHealth());
-		if (playerOne.getHealth() <= 0) {
+		playeOneHealth.setText("Health: " + playerOne.getHealth());
+		if (playerOne.getHealth() <= 0&& gameOver) {
 			Media hurt = new Media(new File("deathSoundEffect.mp3").toURI().toString());
 			sound = new MediaPlayer(hurt);
 			sound.play();
-			Text winText = new Text("Player Two Wins");
+			winText = new Text("Player Two Wins");
 			winText.setX(310);
-			winText.setY(250);
-			winText.setFill(Color.CORNFLOWERBLUE);
+			winText.setY(200);
+			winText.setFill(Color.MAROON);
 			winText.setFont(Font.font(java.awt.Font.SERIF, 50));
 			if(playerOne.getDirection()) {
 				playerOne.setImage("die");
 			}else {
 				playerOne.setImage("dieLeft");
 			}
+			gameOver = false;
+			playerOne.setY(playerOne.groundHeight);
 			fWorld.add(winText);
 			fWorld.stop();
+			restartBox = new HBox();
+			ImageView i = new ImageView("restartButton.png");
+			restartButton = new Button("",i);
+			restartButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent arg0) {
+					restartGame();					
+				}
+
+			});
+			restartButton.setPrefSize(100,20);
+			restartBox.getChildren().addAll(restartButton);
+			restartBox.setAlignment(Pos.CENTER);
+			root.setCenter(restartBox);
 		}
 	}
 
 	public static void updatePlayerTwoHealth() {
-		iceCreamHealth.setText("Health: " + playerTwo.getHealth());
-		if(playerTwo.getHealth() <= 80) {
-			playerOne.powerUp();
-			System.out.println("updated");
-		}
-		if (playerTwo.getHealth() <= 0) {
-			Media hurt = new Media(new File("deathSoundEffect.mp3").toURI().toString());
-			sound = new MediaPlayer(hurt);
-			sound.play();
-			Text winText = new Text("Player One Wins");
-			winText.setX(310);
-			winText.setY(250);
-			winText.setFill(Color.LIGHTGREEN);
-			winText.setFont(Font.font(java.awt.Font.SERIF, 50));
-			if(playerTwo.getDirection()) {
-				playerTwo.setImage("die");
-			}else {
-				playerTwo.setImage("dieLeft");
+
+		playerTwoHealth.setText("Health: " + playerTwo.getHealth());
+		if (playerTwo.getHealth() <= 0 && gameOver) {
+
+			playerTwoHealth.setText("Health: " + playerTwo.getHealth());
+			if(playerTwo.getHealth() <= 80) {
+				playerOne.powerUp();
+				System.out.println("updated");
 			}
-			
-			fWorld.add(winText);
-			fWorld.stop();
+			if (playerTwo.getHealth() <= 0) {
+				Media hurt = new Media(new File("deathSoundEffect.mp3").toURI().toString());
+				sound = new MediaPlayer(hurt);
+				sound.play();
+				winText = new Text("Player One Wins");
+				winText.setX(310);
+				winText.setY(200);
+				winText.setFill(Color.CORNFLOWERBLUE);
+				winText.setFont(Font.font(java.awt.Font.SERIF, 50));
+				if(playerTwo.getDirection()) {
+					playerTwo.setImage("die");
+				}else {
+					playerTwo.setImage("dieLeft");
+				}
+				gameOver = false;
+				playerTwo.setY(225);
+				fWorld.add(winText);
+				fWorld.stop();
+				restartBox = new HBox();
+				ImageView i = new ImageView("restartButton.png");
+				restartButton = new Button("",i);
+				restartButton.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent arg0) {
+						restartGame();					
+					}
+
+				});
+				restartButton.setPrefSize(100,20);
+				restartBox.getChildren().addAll(restartButton);
+				restartBox.setAlignment(Pos.CENTER);
+				root.setCenter(restartBox);
+			}
 		}
 	}
-
 }

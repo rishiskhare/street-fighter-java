@@ -11,6 +11,8 @@ public class Player extends Actor implements Fighter{
 	public String leftProjectileImage;
 	public double dy = 0;
 	public int jumpDy;
+	public int groundHeight;
+	public int bulletHeight;
 	public double dx = 0;
 	double currentX;
 	private Image i;
@@ -31,9 +33,12 @@ public class Player extends Actor implements Fighter{
 	void setImage(String image) {
 		
 	}
-	
+	void playAttackSound() {
+		
+	}
 	@Override
 	public void attack() {
+	playAttackSound();
 	Player player = getOneIntersectingObject(Player.class);
 	if(direction) {
 		setImage("attack");
@@ -42,11 +47,8 @@ public class Player extends Actor implements Fighter{
 	}
 	if(player!= null) {
 		player.takeDamage(getMeleeDamage());
-		System.out.println("hit");
 		GameEngine.updatePlayerOneHealth();
-		GameEngine.updatePlayerTwoHealth();
-		GameEngine.playHurtSound();
-		if(player.getX()>4&&player.getX()<920) {
+		GameEngine.updatePlayerTwoHealth();		
 			if(getX()<player.getX()) {
 				player.currentX = player.getX();
 				player.dx = 5;
@@ -58,7 +60,8 @@ public class Player extends Actor implements Fighter{
 			}
 		}
 	}		
-	}
+	
+	
 
 	@Override
 	public void shoot() {
@@ -92,7 +95,7 @@ public class Player extends Actor implements Fighter{
     	bullet.setFitWidth(60);
     	bullet.setFitHeight(100);
     	bullet.setX(getX());
-    	bullet.setY(getY());
+    	bullet.setY(bulletHeight);
     	bullet.setImage(bulletImage);
     	getWorld().add(bullet);
 	}
@@ -102,7 +105,7 @@ public class Player extends Actor implements Fighter{
 		}else {
 			setImage("jumpLeft");
 		}
-		if(this.getY() >= 250){
+		if(this.getY() >= groundHeight){
 			dy = -jumpDy;
 		}
 	}
