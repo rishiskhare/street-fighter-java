@@ -3,7 +3,9 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
 public class Player_One extends Player{
-	private int speed = 10;
+	private int speed = 5;
+	private boolean poweredUp = false;
+	
 	public Player_One(int xPos, int yPos) {
 		
 		super(100,8,2,"sprite.png", true,8);
@@ -64,16 +66,52 @@ public class Player_One extends Player{
         	}
         }
         
-        //POWER UPS
+        
         
 
 	}
 	
+	//POWER UPS
 	public void powerUp() {
-		projectileImage = "powerUpWeapon.png";
-		leftProjectileImage = "Aircutter-left.png"; //CHANGE IMAGES
+		projectileImage = "PowerUp.png";
+		leftProjectileImage = "PowerUpLeft.png";
 		setMeleeDamage(50);
+		poweredUp = true;
 	}
+	
+	@Override
+	public void attack() {
+		Player player = getOneIntersectingObject(Player.class);
+		if(this.getDirection() && poweredUp) { //if facing right 
+			setImage("powerUp"); 
+			//when I change this, the picture doesnt get changed on the screen. why?
+		}else if (!this.getDirection() && poweredUp){ //if facing left
+			setImage("powerUpLeft");
+		} else if (!poweredUp && this.getDirection()) {
+			setImage("attack");
+		} else if (!poweredUp && !this.getDirection()) {
+			setImage("attackLeft");
+		}
+		if(player!= null) {
+			player.takeDamage(getMeleeDamage());
+			System.out.println("hit");
+			GameEngine.updatePlayerOneHealth();
+			GameEngine.updatePlayerTwoHealth();
+			GameEngine.playHurtSound();
+			if(player.getX()>4&&player.getX()<920) {
+				if(getX()<player.getX()) {
+					player.currentX = player.getX();
+					player.dx = 5;
+					player.dy = -2;
+				}else if(getX()>player.getX()) {
+					player.currentX = player.getX();
+					player.dx = -5;
+					player.dy = -2;
+				}
+			}
+		}		
+	}
+
 	
 	@Override
 	public void setImage(String str) {
@@ -119,6 +157,12 @@ public class Player_One extends Player{
 			break;
 		case "hurtLeft":
 			this.setViewport(new Rectangle2D(750, 0, 150, 145));
+			break;
+		case "powerUp":
+			this.setViewport(new Rectangle2D(0, 0, 150, 145)); //why isnt this working?
+			break;
+		case "powerUpLeft":
+			this.setViewport(new Rectangle2D(150, 0, 150, 145));
 			break;
 		}
 	}
