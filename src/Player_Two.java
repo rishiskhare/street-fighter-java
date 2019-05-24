@@ -6,7 +6,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 public class Player_Two extends Player{
-	private int speed = 2;
+	private int speed = 5;
 	private static MediaPlayer sound = null;
 	public Player_Two(int xPos,int yPos) {
 		super(10,8,4,"cow.png", false, 5);
