@@ -13,51 +13,62 @@ public class Player_Two extends Player{
 	}
 	@Override
 	public void act(long now) {
-		if(getX()> 1100) {
+		if (getX() > 1100) {
 			setX(-100);			
 		}
-		if(getX()<-200) {
-    		setX(1000);
+		if (getX() < -200) {
+			setX(1000);
 		}
-		if(getOneIntersectingObject(Player.class)!=null) {
+		if (getOneIntersectingObject(Player.class) != null) {
 			speed = 1;
-		}else {
+		} else {
 			speed = 2;
 		}
+
 		move(dx,dy);
-		if(dx!=0) {
-			if(Math.abs(getX()-currentX)> 60) {
+		if (dx != 0) {
+			if(Math.abs(getX() - currentX) > 60) {
 				dx = 0;
 			}
 		}
-		if(this.getY() < 250){
+		if (this.getY() < 250) {
 			dy = dy + 0.15;
-		}else{
+		} else {
 			dy = 0;
 		}
-		if(getWorld().isKeyDown(KeyCode.RIGHT)){
-			if(getY()>=250&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
+		if (getWorld().isKeyDown(KeyCode.RIGHT)) {
+			if(getY() >= 250 && !getWorld().isKeyDown(KeyCode.O) && !getWorld().isKeyDown(KeyCode.P)) {
 				setImage("run");
 			}
-            move(speed,0);  
-            setDirection(true);
-        }
-        if (getWorld().isKeyDown(KeyCode.LEFT)) {
-        	if(getY()>=250&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
-        		setImage("runLeft");
-        	}
-        	move(-speed,0); 
-        	setDirection(false);
-        } 
-        if(!getWorld().isKeyDown(KeyCode.LEFT)&&!getWorld().isKeyDown(KeyCode.RIGHT)&&!getWorld().isKeyDown(KeyCode.O)&&
-        		getY()>=250&&!getWorld().isKeyDown(KeyCode.P)){
-        	if(getDirection()) {
-        		setImage("idle");
-        	}else if(!getDirection()) {
-        		setImage("idleLeft");
-        	}
-        }
+			move(speed,0);  
+			setDirection(true);
+		}
+		if (getWorld().isKeyDown(KeyCode.LEFT)) {
+			if (getY() >= 250&&!getWorld().isKeyDown(KeyCode.O) && !getWorld().isKeyDown(KeyCode.P)) {
+				setImage("runLeft");
+			}
+			move(-speed,0); 
+			setDirection(false);
+		} 
+		if (!getWorld().isKeyDown(KeyCode.LEFT) && !getWorld().isKeyDown(KeyCode.RIGHT) && !getWorld().isKeyDown(KeyCode.O) && 
+				getY() >= 250 && !getWorld().isKeyDown(KeyCode.P)){
+			if (getDirection()) {
+				setImage("idle");
+			} else if (!getDirection()) {
+				setImage("idleLeft");
+			}
+		}
+		
+		if (getHealth() < 80) {
+			weaponPowerUp();
+		}
 	}
+	
+	public void weaponPowerUp() {
+		setMeleeDamage(20);
+		setImage("attackLeft");
+	}
+	
 	@Override
 	public void setImage(String str) {
 		switch (str) {
@@ -103,7 +114,7 @@ public class Player_Two extends Player{
 		case "shootLeft":
 			this.setViewport(new Rectangle2D(0, 1885, 150, 145));
 			break;
-			
+
 		}
 	}
 }
