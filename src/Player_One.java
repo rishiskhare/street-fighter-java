@@ -1,14 +1,21 @@
 import java.io.File;
 
 import javafx.geometry.Rectangle2D;
-import javafx.scene.image.Image;
+//import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
+import javafx.scene.image.Image;
+
+
 public class Player_One extends Player{
+
 	private int speed = 10;
 	private static MediaPlayer sound = null;
+	private boolean poweredUp = false;
+	
 	public Player_One(int xPos, int yPos) {
 		
 		super(100,6,3,"adventurerSpritesheet.png", true,8);
@@ -71,7 +78,7 @@ public class Player_One extends Player{
         	}
         }
         
-        //POWER UPS
+        
         
 
 	}
@@ -82,11 +89,48 @@ public class Player_One extends Player{
 		
 	}
 	
-	public void powerUp() {
-		projectileImage = "powerUpWeapon.png";
-		leftProjectileImage = "Aircutter-left.png"; //CHANGE IMAGES
+	//POWER UPS
+	public void powerUp() {	
+		projectileImage = "PowerUp.png";
+		leftProjectileImage = "PowerUpLeft.png";
 		setMeleeDamage(50);
+		poweredUp = true;
+		
 	}
+	
+	@Override
+	public void attack() {
+		Player player = getOneIntersectingObject(Player.class);
+		if(this.getDirection() && poweredUp) { //if facing right 
+			setImage("powerUp"); 
+			//when I change this, the picture doesnt get changed on the screen. why?
+		}else if (!this.getDirection() && poweredUp){ //if facing left
+			setImage("powerUpLeft");
+		} else if (!poweredUp && this.getDirection()) {
+			setImage("attack");
+		} else if (!poweredUp && !this.getDirection()) {
+			setImage("attackLeft");
+		}
+		if(player!= null) {
+			player.takeDamage(getMeleeDamage());
+			System.out.println("hit");
+			GameEngine.updatePlayerOneHealth();
+			GameEngine.updatePlayerTwoHealth();
+			GameEngine.playHurtSound();
+			if(player.getX()>4&&player.getX()<920) {
+				if(getX()<player.getX()) {
+					player.currentX = player.getX();
+					player.dx = 5;
+					player.dy = -2;
+				}else if(getX()>player.getX()) {
+					player.currentX = player.getX();
+					player.dx = -5;
+					player.dy = -2;
+				}
+			}
+		}		
+	}
+
 	
 	@Override
 	public void setImage(String str) {
@@ -132,6 +176,17 @@ public class Player_One extends Player{
 			break;
 		case "hurtLeft":
 			this.setViewport(new Rectangle2D(750, 0, 150, 145));
+			break;
+		case "powerUp":
+			Image im = new Image ("PowerUp.png");
+			this.setImage(im);
+			System.out.println("powered up");
+			break;
+		case "powerUpLeft":
+			Image imLeft = new Image ("PowerUpLeft.png");
+			this.setImage(imLeft);
+			System.out.println("powered up(L)");
+			
 			break;
 		}
 	}

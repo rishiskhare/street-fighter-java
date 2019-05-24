@@ -58,17 +58,17 @@ public class GameEngine extends Application {
 		playerTwoHealth.setFont(Font.font(java.awt.Font.SERIF, 25));
 		playerTwoHealth.setX(650);
 		playerTwoHealth.setY(30);
-		
+
 		ImageView backgroundImageView = new ImageView("ArenaBackground.jpg");
 		backgroundImageView.setFitHeight(scene.getHeight());
 		backgroundImageView.setFitWidth(scene.getWidth());
 		backgroundImageView.relocate(0, 0);
 		root.getChildren().add(backgroundImageView);
-		  
-//		Media sounds = new Media(new File("themeSong.mp3").toURI().toString()); 
-//		song= new MediaPlayer(sounds); 
-//		song.play();
-		 
+
+		//		Media sounds = new Media(new File("themeSong.mp3").toURI().toString()); 
+		//		song= new MediaPlayer(sounds); 
+		//		song.play();
+
 
 		fWorld.add(playerOne);
 		fWorld.add(playerTwo);
@@ -78,7 +78,7 @@ public class GameEngine extends Application {
 		root.setAlignment(fWorld, Pos.CENTER);
 		stage.setScene(scene);
 		stage.show();
-		
+
 		scene.setOnKeyPressed(event -> {
 			if (event.getCode() == KeyCode.D) {
 				fWorld.addKeyCode(KeyCode.D);
@@ -157,10 +157,10 @@ public class GameEngine extends Application {
 			}
 
 		});
-		
+
 
 	}
-	
+
 	public static void restartGame() {
 		playerOne.setX(200);
 		playerOne.setY(250);
@@ -181,13 +181,13 @@ public class GameEngine extends Application {
 		sound = new MediaPlayer(hurt);
 		sound.play();
 	}
-	
+
 	public static void playBulletSound() {
 		Media hurt = new Media(new File("bulletSoundEffect.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
 		sound.play();
 	}
-	
+
 	public static void updatePlayerOneHealth() {
 		playeOneHealth.setText("Health: " + playerOne.getHealth());
 		if (playerOne.getHealth() <= 0&& gameOver) {
@@ -216,7 +216,7 @@ public class GameEngine extends Application {
 				public void handle(ActionEvent arg0) {
 					restartGame();					
 				}
-				
+
 			});
 			restartButton.setPrefSize(100,20);
 			restartBox.getChildren().addAll(restartButton);
@@ -226,40 +226,48 @@ public class GameEngine extends Application {
 	}
 
 	public static void updatePlayerTwoHealth() {
+
 		playerTwoHealth.setText("Health: " + playerTwo.getHealth());
 		if (playerTwo.getHealth() <= 0 && gameOver) {
-			Media hurt = new Media(new File("deathSoundEffect.mp3").toURI().toString());
-			sound = new MediaPlayer(hurt);
-			sound.play();
-			winText = new Text("Player One Wins");
-			winText.setX(310);
-			winText.setY(200);
-			winText.setFill(Color.CORNFLOWERBLUE);
-			winText.setFont(Font.font(java.awt.Font.SERIF, 50));
-			if(playerTwo.getDirection()) {
-				playerTwo.setImage("die");
-			}else {
-				playerTwo.setImage("dieLeft");
+
+			playerTwoHealth.setText("Health: " + playerTwo.getHealth());
+			if(playerTwo.getHealth() <= 80) {
+				playerOne.powerUp();
+				System.out.println("updated");
 			}
-			gameOver = false;
-			playerTwo.setY(225);
-			fWorld.add(winText);
-			fWorld.stop();
-			restartBox = new HBox();
-			ImageView i = new ImageView("restartButton.png");
-			restartButton = new Button("",i);
-			restartButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent arg0) {
-					restartGame();					
+			if (playerTwo.getHealth() <= 0) {
+				Media hurt = new Media(new File("deathSoundEffect.mp3").toURI().toString());
+				sound = new MediaPlayer(hurt);
+				sound.play();
+				winText = new Text("Player One Wins");
+				winText.setX(310);
+				winText.setY(200);
+				winText.setFill(Color.CORNFLOWERBLUE);
+				winText.setFont(Font.font(java.awt.Font.SERIF, 50));
+				if(playerTwo.getDirection()) {
+					playerTwo.setImage("die");
+				}else {
+					playerTwo.setImage("dieLeft");
 				}
-				
-			});
-			restartButton.setPrefSize(100,20);
-			restartBox.getChildren().addAll(restartButton);
-			restartBox.setAlignment(Pos.CENTER);
-			root.setCenter(restartBox);
+				gameOver = false;
+				playerTwo.setY(225);
+				fWorld.add(winText);
+				fWorld.stop();
+				restartBox = new HBox();
+				ImageView i = new ImageView("restartButton.png");
+				restartButton = new Button("",i);
+				restartButton.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent arg0) {
+						restartGame();					
+					}
+
+				});
+				restartButton.setPrefSize(100,20);
+				restartBox.getChildren().addAll(restartButton);
+				restartBox.setAlignment(Pos.CENTER);
+				root.setCenter(restartBox);
+			}
 		}
 	}
-
 }

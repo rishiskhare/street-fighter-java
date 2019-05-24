@@ -22,28 +22,31 @@ public class Player_Two extends Player{
 	@Override
 	public void act(long now) {
 		bulletHeight = (int) (getY() +95);
-		if(getX()> 1100) {
+		if (getX() > 1100) {
 			setX(-100);			
 		}
-		if(getX()<-200) {
-    		setX(1000);
+		if (getX() < -200) {
+			setX(1000);
 		}
-		if(getOneIntersectingObject(Player.class)!=null) {
+		if (getOneIntersectingObject(Player.class) != null) {
 			speed = 1;
-		}else {
+		} else {
 			speed = 2;
 		}
+
 		move(dx,dy);
-		if(dx!=0) {
-			if(Math.abs(getX()-currentX)> 60) {
+		if (dx != 0) {
+			if(Math.abs(getX() - currentX) > 60) {
 				dx = 0;
 			}
 		}
+
 		if(this.getY() < groundHeight){
 			dy = dy + 0.15;
-		}else{
+		} else {
 			dy = 0;
 		}
+
 		if(getWorld().isKeyDown(KeyCode.RIGHT)){
 			if(getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
 				setImage("run");
@@ -66,12 +69,23 @@ public class Player_Two extends Player{
         		setImage("idleLeft");
         	}
         }
+
+		if (getHealth() < 80) {
+			weaponPowerUp();
+		}
+
 	}
+
 	public void playAttackSound() {
 		Media hurt = new Media(new File("minotaurAttackSound.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
 		sound.play();		
 	}
+	
+	public void weaponPowerUp() {
+		setMeleeDamage(50);
+	}
+	
 	@Override
 	public void setImage(String str) {
 		switch (str) {
@@ -117,7 +131,7 @@ public class Player_Two extends Player{
 		case "shootLeft":
 			this.setViewport(new Rectangle2D(0, 1885, 150, 145));
 			break;
-			
+
 		}
 	}
 }
