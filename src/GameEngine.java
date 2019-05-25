@@ -69,7 +69,6 @@ public class GameEngine extends Application {
 		//		song= new MediaPlayer(sounds); 
 		//		song.play();
 
-
 		fWorld.add(playerOne);
 		fWorld.add(playerTwo);
 		fWorld.add(playeOneHealth);
@@ -190,15 +189,17 @@ public class GameEngine extends Application {
 
 	public static void updatePlayerOneHealth() {
 		playeOneHealth.setText("Health: " + playerOne.getHealth());
+		if(playerOne.getHealth() <= 80) {
+			playerOne.powerUp();
+			System.out.println("updated");
+		}
 		if (playerOne.getHealth() <= 0&& gameOver) {
-			Media hurt = new Media(new File("deathSoundEffect.mp3").toURI().toString());
-			sound = new MediaPlayer(hurt);
-			sound.play();
 			winText = new Text("Player Two Wins");
 			winText.setX(310);
 			winText.setY(200);
 			winText.setFill(Color.MAROON);
 			winText.setFont(Font.font(java.awt.Font.SERIF, 50));
+			playerOne.playDeathSound();
 			if(playerOne.getDirection()) {
 				playerOne.setImage("die");
 			}else {
@@ -226,24 +227,19 @@ public class GameEngine extends Application {
 	}
 
 	public static void updatePlayerTwoHealth() {
-
 		playerTwoHealth.setText("Health: " + playerTwo.getHealth());
-		if (playerTwo.getHealth() <= 0 && gameOver) {
-
-			playerTwoHealth.setText("Health: " + playerTwo.getHealth());
-			if(playerTwo.getHealth() <= 80) {
-				playerOne.powerUp();
-				System.out.println("updated");
-			}
+		if(playerTwo.getHealth() <= 80) {
+			playerTwo.weaponPowerUp();
+			System.out.println("updated");
+		}
+		if (playerTwo.getHealth() <= 0 && gameOver) {}
 			if (playerTwo.getHealth() <= 0) {
-				Media hurt = new Media(new File("deathSoundEffect.mp3").toURI().toString());
-				sound = new MediaPlayer(hurt);
-				sound.play();
 				winText = new Text("Player One Wins");
 				winText.setX(310);
 				winText.setY(200);
 				winText.setFill(Color.CORNFLOWERBLUE);
 				winText.setFont(Font.font(java.awt.Font.SERIF, 50));
+				playerTwo.playDeathSound();
 				if(playerTwo.getDirection()) {
 					playerTwo.setImage("die");
 				}else {
@@ -261,7 +257,6 @@ public class GameEngine extends Application {
 					public void handle(ActionEvent arg0) {
 						restartGame();					
 					}
-
 				});
 				restartButton.setPrefSize(100,20);
 				restartBox.getChildren().addAll(restartButton);
@@ -270,4 +265,4 @@ public class GameEngine extends Application {
 			}
 		}
 	}
-}
+

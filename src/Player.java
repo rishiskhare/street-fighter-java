@@ -60,8 +60,7 @@ public class Player extends Actor implements Fighter{
 			}
 		}
 	}		
-	
-	
+
 
 	@Override
 	public void shoot() {

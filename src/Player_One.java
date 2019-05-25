@@ -85,51 +85,55 @@ public class Player_One extends Player{
 	public void playAttackSound() {
 		Media hurt = new Media(new File("adventurerAttackSound.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
-		sound.play();
-		
+		sound.play();	
+	}
+	
+	public void playDeathSound() {
+		Media hurt = new Media(new File("MinotaurDeathSound.mp3").toURI().toString());
+		sound = new MediaPlayer(hurt);
+		sound.play();		
 	}
 	
 	//POWER UPS
 	public void powerUp() {	
 		projectileImage = "PowerUp.png";
 		leftProjectileImage = "PowerUpLeft.png";
-		setMeleeDamage(50);
+		setProjectileDamage(10);
 		poweredUp = true;
 		
 	}
 	
-	@Override
-	public void attack() {
-		Player player = getOneIntersectingObject(Player.class);
-		if(this.getDirection() && poweredUp) { //if facing right 
-			setImage("powerUp"); 
-			//when I change this, the picture doesnt get changed on the screen. why?
-		}else if (!this.getDirection() && poweredUp){ //if facing left
-			setImage("powerUpLeft");
-		} else if (!poweredUp && this.getDirection()) {
-			setImage("attack");
-		} else if (!poweredUp && !this.getDirection()) {
-			setImage("attackLeft");
-		}
-		if(player!= null) {
-			player.takeDamage(getMeleeDamage());
-			System.out.println("hit");
-			GameEngine.updatePlayerOneHealth();
-			GameEngine.updatePlayerTwoHealth();
-			GameEngine.playHurtSound();
-			if(player.getX()>4&&player.getX()<920) {
-				if(getX()<player.getX()) {
-					player.currentX = player.getX();
-					player.dx = 5;
-					player.dy = -2;
-				}else if(getX()>player.getX()) {
-					player.currentX = player.getX();
-					player.dx = -5;
-					player.dy = -2;
-				}
-			}
-		}		
-	}
+//	@Override
+//	public void attack() {
+//		playAttackSound();
+//		Player player = getOneIntersectingObject(Player.class);
+//		if(this.getDirection() && poweredUp) { //if facing right 
+//			//setImage("powerUp"); 
+//			//when I change this, the picture doesnt get changed on the screen. why?
+//		}else if (!this.getDirection() && poweredUp){ //if facing left
+//			setImage("powerUpLeft");
+//		} else if (!poweredUp && this.getDirection()) {
+//			setImage("attack");
+//		} else if (!poweredUp && !this.getDirection()) {
+//			setImage("attackLeft");
+//		}
+//		if(player!= null) {
+//			player.takeDamage(getMeleeDamage());
+//			GameEngine.updatePlayerOneHealth();
+//			GameEngine.updatePlayerTwoHealth();
+//			if(player.getX()>4&&player.getX()<920) {
+//				if(getX()<player.getX()) {
+//					player.currentX = player.getX();
+//					player.dx = 5;
+//					player.dy = -2;
+//				}else if(getX()>player.getX()) {
+//					player.currentX = player.getX();
+//					player.dx = -5;
+//					player.dy = -2;
+//				}
+//			}
+//		}		
+//	}
 
 	
 	@Override
@@ -185,8 +189,7 @@ public class Player_One extends Player{
 		case "powerUpLeft":
 			Image imLeft = new Image ("PowerUpLeft.png");
 			this.setImage(imLeft);
-			System.out.println("powered up(L)");
-			
+			System.out.println("powered up(L)");			
 			break;
 		}
 	}

@@ -4,5 +4,4 @@ public interface Fighter {
 			
 	public void shoot();
 	
-	
 }
