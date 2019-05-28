@@ -59,7 +59,7 @@ public class GameEngine extends Application {
 		playerTwoHealth.setX(650);
 		playerTwoHealth.setY(30);
 
-		ImageView backgroundImageView = new ImageView("ArenaBackground.jpg");
+		ImageView backgroundImageView = new ImageView("file:resources/ArenaBackground.jpg");
 		backgroundImageView.setFitHeight(scene.getHeight());
 		backgroundImageView.setFitWidth(scene.getWidth());
 		backgroundImageView.relocate(0, 0);
@@ -179,13 +179,13 @@ public class GameEngine extends Application {
 	}
 
 	public static void playHurtSound() {
-		Media hurt = new Media(new File("hurtSoundEffect.mp3").toURI().toString());
+		Media hurt = new Media(new File("file:resources/hurtSoundEffect.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
 		sound.play();
 	}
 
 	public static void playBulletSound() {
-		Media hurt = new Media(new File("bulletSoundEffect.mp3").toURI().toString());
+		Media hurt = new Media(new File("file:resources/bulletSoundEffect.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
 		sound.play();
 	}
@@ -193,7 +193,7 @@ public class GameEngine extends Application {
 	public static void updatePlayerOneHealth() {
 		playeOneHealth.setText("Health: " + playerOne.getHealth());
 		if (playerOne.getHealth() <= 0&& gameOver) {
-			Media hurt = new Media(new File("deathSoundEffect.mp3").toURI().toString());
+			Media hurt = new Media(new File("file:resources/deathSoundEffect.mp3").toURI().toString());
 			sound = new MediaPlayer(hurt);
 			sound.play();
 			winText = new Text("Player Two Wins");
@@ -211,7 +211,7 @@ public class GameEngine extends Application {
 			fWorld.add(winText);
 			fWorld.stop();
 			restartBox = new HBox();
-			ImageView i = new ImageView("restartButton.png");
+			ImageView i = new ImageView("file:resources/restartButton.png");
 			restartButton = new Button("",i);
 			restartButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -230,15 +230,16 @@ public class GameEngine extends Application {
 	public static void updatePlayerTwoHealth() {
 
 		playerTwoHealth.setText("Health: " + playerTwo.getHealth());
+		if(playerTwo.getHealth() <= 100) {
+			playerOne.powerUp();
+			System.out.println("updated");
+		}
 		if (playerTwo.getHealth() <= 0 && gameOver) {
 
 			playerTwoHealth.setText("Health: " + playerTwo.getHealth());
-			if(playerTwo.getHealth() <= 100) {
-				playerOne.powerUp();
-				System.out.println("updated");
-			}
+			
 			if (playerTwo.getHealth() <= 0) {
-				Media hurt = new Media(new File("deathSoundEffect.mp3").toURI().toString());
+				Media hurt = new Media(new File("file:resources/deathSoundEffect.mp3").toURI().toString());
 				sound = new MediaPlayer(hurt);
 				sound.play();
 				winText = new Text("Player One Wins");
@@ -256,7 +257,7 @@ public class GameEngine extends Application {
 				fWorld.add(winText);
 				fWorld.stop();
 				restartBox = new HBox();
-				ImageView i = new ImageView("restartButton.png");
+				ImageView i = new ImageView("file:resources/restartButton.png");
 				restartButton = new Button("",i);
 				restartButton.setOnAction(new EventHandler<ActionEvent>() {
 					@Override

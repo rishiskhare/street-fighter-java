@@ -9,11 +9,11 @@ public class Player_Two extends Player{
 	private int speed = 5;
 	private static MediaPlayer sound = null;
 	public Player_Two(int xPos,int yPos) {
-		super(150,8,4,"cow.png", false, 5);
+		super(150,8,4,"file:resources/cow.png", false, 5);
 		setImage("idleLeft");
 		groundHeight = yPos;
-		projectileImage = "throwingAxe.png";
-		leftProjectileImage = "throwingAxe-left.png";
+		projectileImage = "file:resources/throwingAxe.png";
+		leftProjectileImage = "file:resources/throwingAxe-left.png";
 		setX(xPos);
 		setY(yPos);
 		setFitWidth(240);
@@ -73,7 +73,7 @@ public class Player_Two extends Player{
 	}
 
 	public void playAttackSound() {
-		Media hurt = new Media(new File("minotaurAttackSound.mp3").toURI().toString());
+		Media hurt = new Media(new File("file:resources/minotaurAttackSound.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
 		sound.play();		
 	}
