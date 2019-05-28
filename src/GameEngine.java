@@ -34,7 +34,8 @@ public class GameEngine extends Application {
 	public static BorderPane root;
 	static HBox restartBox;
 	static Text winText;
-	Text time;
+	ImageView backgroundImageView;
+	String backgroundString;
 	public static void main(String[] args) {
 		launch();
 	}
@@ -59,7 +60,8 @@ public class GameEngine extends Application {
 		playerTwoHealth.setX(650);
 		playerTwoHealth.setY(30);
 
-		ImageView backgroundImageView = new ImageView("ArenaBackground.jpg");
+		backgroundString = "ArenaBackground.jpg";
+		backgroundImageView = new ImageView(backgroundString);
 		backgroundImageView.setFitHeight(scene.getHeight());
 		backgroundImageView.setFitWidth(scene.getWidth());
 		backgroundImageView.relocate(0, 0);
@@ -167,8 +169,10 @@ public class GameEngine extends Application {
 		playerTwo.setY(185);
 		playerOne.setHealth(100);
 		playerTwo.setHealth(150);
+		playerOne.setImage("idle");
+		playerTwo.setImage("idleLeft");
 		updatePlayerOneHealth();
-		updatePlayerTwoHealth();
+		updatePlayerTwoHealth();		
 		root.getChildren().remove(restartBox);
 		fWorld.remove(winText);
 		gameOver = true;

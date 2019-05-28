@@ -9,7 +9,7 @@ public class Player_Two extends Player{
 	private int speed = 2;
 	private static MediaPlayer sound = null;
 	public Player_Two(int xPos,int yPos) {
-		super(150,8,4,"cow.png", false, 5);
+		super(150,8,4,"minotaurSpritesheet.png", false, 5);
 		setImage("idleLeft");
 		groundHeight = yPos;
 		projectileImage = "throwingAxe.png";
@@ -52,6 +52,7 @@ public class Player_Two extends Player{
 				setImage("run");
 			}
             move(speed,0);  
+            setHurt(false);
             setDirection(true);
         }
         if (getWorld().isKeyDown(KeyCode.LEFT)) {
@@ -59,10 +60,11 @@ public class Player_Two extends Player{
         		setImage("runLeft");
         	}
         	move(-speed,0); 
+        	setHurt(false);
         	setDirection(false);
         } 
         if(!getWorld().isKeyDown(KeyCode.LEFT)&&!getWorld().isKeyDown(KeyCode.RIGHT)&&!getWorld().isKeyDown(KeyCode.O)&&
-        		getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.P)){
+        		getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.P)&&!isHurt){
         	if(getDirection()) {
         		setImage("idle");
         	}else if(!getDirection()) {
@@ -132,10 +134,10 @@ public class Player_Two extends Player{
 			this.setViewport(new Rectangle2D(0, 1595, 150, 145));
 			break;
 		case "shoot":
-			this.setViewport(new Rectangle2D(0, 1740, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1885, 150, 145));
 			break;
 		case "shootLeft":
-			this.setViewport(new Rectangle2D(0, 1885, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1740, 150, 145));
 			break;
 
 		}

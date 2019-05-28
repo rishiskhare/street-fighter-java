@@ -18,7 +18,7 @@ public class Player_One extends Player{
 	
 	public Player_One(int xPos, int yPos) {
 		
-		super(100,6,3,"adventurerSpritesheet.png", true,8);
+		super(100,6,3,"adventureSpritesheet.png", true,8);
 		groundHeight = yPos;
 		projectileImage = "Aircutter.png";
 		leftProjectileImage = "Aircutter-left.png";
@@ -60,17 +60,19 @@ public class Player_One extends Player{
 				setImage("run");
 			}
             move(speed,0);
+            setHurt(false);
             setDirection(true);
         }
         if (getWorld().isKeyDown(KeyCode.A)) {
         	if(getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.F)&&!getWorld().isKeyDown(KeyCode.E)) {
         		setImage("runLeft");
         	}
-        	move(-speed,0);  
+        	move(-speed,0);
+        	setHurt(false);
         	setDirection(false);
         } 
         if(!getWorld().isKeyDown(KeyCode.A)&&!getWorld().isKeyDown(KeyCode.D)&&!getWorld().isKeyDown(KeyCode.F)&&
-        		getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.E)){
+        		getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.E)&& !isHurt){
         	if(getDirection()) {
         		setImage("idle");
         	}else if(!getDirection()) {
@@ -103,83 +105,50 @@ public class Player_One extends Player{
 		
 	}
 	
-//	@Override
-//	public void attack() {
-//		playAttackSound();
-//		Player player = getOneIntersectingObject(Player.class);
-//		if(this.getDirection() && poweredUp) { //if facing right 
-//			//setImage("powerUp"); 
-//			//when I change this, the picture doesnt get changed on the screen. why?
-//		}else if (!this.getDirection() && poweredUp){ //if facing left
-//			setImage("powerUpLeft");
-//		} else if (!poweredUp && this.getDirection()) {
-//			setImage("attack");
-//		} else if (!poweredUp && !this.getDirection()) {
-//			setImage("attackLeft");
-//		}
-//		if(player!= null) {
-//			player.takeDamage(getMeleeDamage());
-//			GameEngine.updatePlayerOneHealth();
-//			GameEngine.updatePlayerTwoHealth();
-//			if(player.getX()>4&&player.getX()<920) {
-//				if(getX()<player.getX()) {
-//					player.currentX = player.getX();
-//					player.dx = 5;
-//					player.dy = -2;
-//				}else if(getX()>player.getX()) {
-//					player.currentX = player.getX();
-//					player.dx = -5;
-//					player.dy = -2;
-//				}
-//			}
-//		}		
-//	}
-
-	
 	@Override
 	public void setImage(String str) {
 		switch (str) {
 		case "idle":
-			this.setViewport(new Rectangle2D(1050, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1015, 150, 145));
 			break;
 		case "idleLeft":
-			this.setViewport(new Rectangle2D(900, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 870, 150, 145));
 			break;
 		case "jump":
-			this.setViewport(new Rectangle2D(1200, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1305, 150, 145));
 			break;
 		case "jumpLeft":
-			this.setViewport(new Rectangle2D(1350, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1160, 150, 145));
 			break;
 		case "attack":
 			this.setViewport(new Rectangle2D(0, 0, 150, 145));
 			break;
 		case "attackLeft":
-			this.setViewport(new Rectangle2D(150, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 145, 150, 145));
 			break;
 		case "die":
-			this.setViewport(new Rectangle2D(450, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 435, 150, 145));
 			break;
 		case "dieLeft":
-			this.setViewport(new Rectangle2D(300, 0, 150, 145));
+			this.setViewport(new Rectangle2D(300, 290, 150, 145));
 			break;
 		case "run":
-			this.setViewport(new Rectangle2D(1650, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1595, 150, 145));
 			break;
 		case "runLeft":
-			this.setViewport(new Rectangle2D(1500, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1450, 150, 145));
 			break;
 		case "shoot":
-			this.setViewport(new Rectangle2D(0, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1885, 150, 145));
 			break;
 		case "shootLeft":
-			this.setViewport(new Rectangle2D(150, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1740, 150, 145));
 			break;
 		case "hurt":
-			this.setViewport(new Rectangle2D(600, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 725, 150, 145));
 			break;
 		case "hurtLeft":
-			this.setViewport(new Rectangle2D(750, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 580, 150, 145));
 			break;
 		case "powerUp":
 			Image im = new Image ("PowerUp.png");
