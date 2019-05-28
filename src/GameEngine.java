@@ -35,7 +35,6 @@ public class GameEngine extends Application {
 	static HBox restartBox;
 	static Text winText;
 	ImageView backgroundImageView;
-	String backgroundString;
 	public static void main(String[] args) {
 		launch();
 	}
@@ -60,8 +59,8 @@ public class GameEngine extends Application {
 		playerTwoHealth.setX(650);
 		playerTwoHealth.setY(30);
 
-		backgroundString = "ArenaBackground.jpg";
-		backgroundImageView = new ImageView(backgroundString);
+
+		backgroundImageView = new ImageView("ArenaBackground.jpg");
 		backgroundImageView.setFitHeight(scene.getHeight());
 		backgroundImageView.setFitWidth(scene.getWidth());
 		backgroundImageView.relocate(0, 0);
@@ -171,6 +170,8 @@ public class GameEngine extends Application {
 		playerTwo.setHealth(150);
 		playerOne.setImage("idle");
 		playerTwo.setImage("idleLeft");
+		playerOne.setMeleeDamage(6);
+		playerTwo.setMeleeDamage(8);
 		updatePlayerOneHealth();
 		updatePlayerTwoHealth();		
 		root.getChildren().remove(restartBox);
@@ -180,13 +181,13 @@ public class GameEngine extends Application {
 	}
 
 	public static void playHurtSound() {
-		Media hurt = new Media(new File("hurtSoundEffect.mp3").toURI().toString());
+		Media hurt = new Media(new File("file:resources/hurtSoundEffect.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
 		sound.play();
 	}
 
 	public static void playBulletSound() {
-		Media hurt = new Media(new File("bulletSoundEffect.mp3").toURI().toString());
+		Media hurt = new Media(new File("file:resources/bulletSoundEffect.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
 		sound.play();
 	}
@@ -198,6 +199,9 @@ public class GameEngine extends Application {
 			System.out.println("updated");
 		}
 		if (playerOne.getHealth() <= 0&& gameOver) {
+			Media hurt = new Media(new File("file:resources/deathSoundEffect.mp3").toURI().toString());
+			sound = new MediaPlayer(hurt);
+			sound.play();
 			winText = new Text("Player Two Wins");
 			winText.setX(310);
 			winText.setY(200);
@@ -214,7 +218,7 @@ public class GameEngine extends Application {
 			fWorld.add(winText);
 			fWorld.stop();
 			restartBox = new HBox();
-			ImageView i = new ImageView("restartButton.png");
+			ImageView i = new ImageView("file:resources/restartButton.png");
 			restartButton = new Button("",i);
 			restartButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -233,7 +237,7 @@ public class GameEngine extends Application {
 	public static void updatePlayerTwoHealth() {
 		playerTwoHealth.setText("Health: " + playerTwo.getHealth());
 		if(playerTwo.getHealth() <= 80) {
-			playerTwo.weaponPowerUp();
+			playerTwo.playerPowerUp();
 			System.out.println("updated");
 		}
 		if (playerTwo.getHealth() <= 0 && gameOver) {}
@@ -254,7 +258,7 @@ public class GameEngine extends Application {
 				fWorld.add(winText);
 				fWorld.stop();
 				restartBox = new HBox();
-				ImageView i = new ImageView("restartButton.png");
+				ImageView i = new ImageView("file:resources/restartButton.png");
 				restartButton = new Button("",i);
 				restartButton.setOnAction(new EventHandler<ActionEvent>() {
 					@Override

@@ -18,10 +18,11 @@ public class Player_One extends Player{
 	
 	public Player_One(int xPos, int yPos) {
 		
+
 		super(100,6,3,"adventureSpritesheet.png", true,8);
 		groundHeight = yPos;
-		projectileImage = "Aircutter.png";
-		leftProjectileImage = "Aircutter-left.png";
+		projectileImage = "file:resources/Aircutter.png";
+		leftProjectileImage = "file:resources/Aircutter-left.png";
 		setImage("idle");
 		setX(xPos);
 		setY(yPos);
@@ -85,7 +86,7 @@ public class Player_One extends Player{
 
 	}
 	public void playAttackSound() {
-		Media hurt = new Media(new File("adventurerAttackSound.mp3").toURI().toString());
+		Media hurt = new Media(new File("file:resources/adventurerAttackSound.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
 		sound.play();	
 	}
@@ -98,12 +99,13 @@ public class Player_One extends Player{
 	
 	//POWER UPS
 	public void powerUp() {	
-		projectileImage = "PowerUp.png";
-		leftProjectileImage = "PowerUpLeft.png";
-		setProjectileDamage(10);
 		poweredUp = true;
-		
+		System.out.println("in power up method");
+		projectileImage = "file:resources/PowerUp.png";
+		leftProjectileImage = "file:resources/PowerUpLeft.png";
+		setMeleeDamage(50);
 	}
+	
 	
 	@Override
 	public void setImage(String str) {
@@ -151,14 +153,18 @@ public class Player_One extends Player{
 			this.setViewport(new Rectangle2D(0, 580, 150, 145));
 			break;
 		case "powerUp":
-			Image im = new Image ("PowerUp.png");
-			this.setImage(im);
+			//Image im = new Image ("file:UpdatedPlayer1Right.png");
+			//String path = getClass().getClassLoader().getResource("resources/UpdatedPlayer1Right.png").toString();
+
+			//this.setImage(path);
 			System.out.println("powered up");
 			break;
 		case "powerUpLeft":
-			Image imLeft = new Image ("PowerUpLeft.png");
-			this.setImage(imLeft);
-			System.out.println("powered up(L)");			
+			//Image imLeft = new Image ("UpdatedPlayer1Left copy.png");
+			//this.setImage(imLeft);
+			System.out.println("powered up(L)");
+			
+
 			break;
 		}
 	}
