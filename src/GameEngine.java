@@ -1,4 +1,5 @@
 import java.io.File;
+import javafx.scene.paint.Color;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -23,6 +24,19 @@ public class GameEngine extends Application {
 	public static Text iceCreamHealth;
 	private static MediaPlayer sound = null;
 	private static Scene scene;
+	private static HealthBar p1HealthBar;
+	private static HealthBar p2HealthBar;
+	private int health;
+	private double p1healthX;
+	private double p1healthY;
+	private double p1healthWidth;
+	private double p1healthHeight;
+	private double p2healthX;
+	private double p2healthY;
+	private double p2healthWidth;
+	private double p2healthHeight;
+	private Color healthColor;
+	
 
 	public static void main(String[] args) {
 		launch();
@@ -35,18 +49,35 @@ public class GameEngine extends Application {
 		stage.setTitle("Food Fighter");
 		BorderPane root = new BorderPane();
 		scene = new Scene(root, 1000, 500);
-
-		cupcakeHealth = new Text("Health: " + playerOne.getHealth());
-		cupcakeHealth.setFill(Color.LIGHTGREEN);
-		cupcakeHealth.setFont(Font.font(java.awt.Font.SERIF, 25));
-		cupcakeHealth.setX(50);
-		cupcakeHealth.setY(30);
-
-		iceCreamHealth = new Text("Health: " + playerTwo.getHealth());
-		iceCreamHealth.setFill(Color.MAROON);
-		iceCreamHealth.setFont(Font.font(java.awt.Font.SERIF, 25));
-		iceCreamHealth.setX(650);
-		iceCreamHealth.setY(30);
+		
+		health = 100;
+		healthColor = Color.rgb(0, 255, 0);
+		
+		p1healthWidth = health;
+		p1healthHeight = 20;
+		p1healthX = 20;
+		p1healthY = 20;
+		
+		p2healthWidth = health;
+		p2healthHeight = 20;
+		p2healthX = 800;
+		p2healthY = 20;
+		
+		p1HealthBar = new HealthBar(health, p1healthWidth, p1healthHeight, p1healthX, p1healthY, healthColor, playerOne);
+		p2HealthBar = new HealthBar(health, p2healthWidth, p2healthHeight, p2healthX, p2healthY, healthColor, playerTwo);
+		
+		
+//		cupcakeHealth = new Text("Health: " + playerOne.getHealth());
+//		cupcakeHealth.setFill(Color.LIGHTGREEN);
+//		cupcakeHealth.setFont(Font.font(java.awt.Font.SERIF, 25));
+//		cupcakeHealth.setX(50);
+//		cupcakeHealth.setY(30);
+//
+//		iceCreamHealth = new Text("Health: " + playerTwo.getHealth());
+//		iceCreamHealth.setFill(Color.MAROON);
+//		iceCreamHealth.setFont(Font.font(java.awt.Font.SERIF, 25));
+//		iceCreamHealth.setX(650);
+//		iceCreamHealth.setY(30);
 
 		ImageView backgroundImageView = new ImageView("ArenaBackground.jpg");
 		backgroundImageView.setFitHeight(scene.getHeight());
@@ -63,8 +94,10 @@ public class GameEngine extends Application {
 
 		fWorld.add(playerOne);
 		fWorld.add(playerTwo);
-		fWorld.add(cupcakeHealth);
-		fWorld.add(iceCreamHealth);
+//		fWorld.add(cupcakeHealth);
+//		fWorld.add(iceCreamHealth);
+		fWorld.add(p1HealthBar);
+		fWorld.add(p2HealthBar);
 		root.getChildren().add(fWorld);
 		root.setAlignment(fWorld, Pos.CENTER);
 		stage.setScene(scene);
@@ -161,7 +194,12 @@ public class GameEngine extends Application {
 	}
 	
 	public static void updatePlayerOneHealth() {
-		cupcakeHealth.setText("Health: " + playerOne.getHealth());
+		if (playerOne.getHealth() > 0) {
+			p1HealthBar.setHealth(playerOne.getHealth());
+		}
+		else {
+			fWorld.remove(p1HealthBar);
+		}
 		if (playerOne.getHealth() <= 0) {
 			Media hurt = new Media(new File("deathSoundEffect.mp3").toURI().toString());
 			sound = new MediaPlayer(hurt);
@@ -182,7 +220,13 @@ public class GameEngine extends Application {
 	}
 
 	public static void updatePlayerTwoHealth() {
-		iceCreamHealth.setText("Health: " + playerTwo.getHealth());
+		if (playerTwo.getHealth() > 0) {
+			p2HealthBar.setHealth(playerTwo.getHealth());
+		}
+		else {
+			fWorld.remove(p2HealthBar);
+		}
+		
 		if (playerTwo.getHealth() <= 0) {
 			Media hurt = new Media(new File("deathSoundEffect.mp3").toURI().toString());
 			sound = new MediaPlayer(hurt);
