@@ -19,8 +19,8 @@ public class Player extends Actor implements Fighter{
 	private Image i;
 	int aniCounter = 0;
 	
-	public Player(int health, int melee, int projectile, String image, boolean direct,int jumpHeight) {
-		i = new Image(image);
+	public Player(int health, int melee, int projectile, String path, boolean direct,int jumpHeight) {
+		i = new Image(path);
 		setImage(i);
 		this.health = health;
 		meleeDamage = melee;

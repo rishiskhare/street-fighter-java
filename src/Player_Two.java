@@ -9,11 +9,11 @@ public class Player_Two extends Player{
 	private int speed = 5;
 	private static MediaPlayer sound = null;
 	public Player_Two(int xPos,int yPos) {
-		super(150,8,4,"minotaurSpritesheet.png", false, 5);
+		super(150,8,4,"resources/minotaurSpritesheet.png", false, 5);
 		setImage("idleLeft");
 		groundHeight = yPos;
-		projectileImage = "file:resources/throwingAxe.png";
-		leftProjectileImage = "file:resources/throwingAxe-left.png";
+		projectileImage = "resources/throwingAxe.png";
+		leftProjectileImage = "resources/throwingAxe-left.png";
 		setX(xPos);
 		setY(yPos);
 		setFitWidth(240);
@@ -75,13 +75,13 @@ public class Player_Two extends Player{
 	}
 
 	public void playAttackSound() {
-		Media hurt = new Media(new File("file:resources/minotaurAttackSound.mp3").toURI().toString());
+		Media hurt = new Media(new File("src/resources/minotaurAttackSound.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
 		sound.play();		
 	}
 	
 	public void playDeathSound() {
-		Media hurt = new Media(new File("MinotaurDeathSound.mp3").toURI().toString());
+		Media hurt = new Media(new File("src/resources/MinotaurDeathSound.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
 		sound.play();		
 	}
@@ -96,15 +96,7 @@ public class Player_Two extends Player{
 		}
 	}
 	
-	@Override
-	public void attack() {
-		Player p1 = this.getOneIntersectingObject(Player.class);
-		if (p1.getHealth() < 80) {
-			playerPowerUp();
-		}
-	}
-	
-	
+		
 	@Override
 	public void setImage(String str) {
 		switch (str) {

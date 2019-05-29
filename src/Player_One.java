@@ -19,10 +19,10 @@ public class Player_One extends Player{
 	public Player_One(int xPos, int yPos) {
 		
 
-		super(100,6,3,"adventureSpritesheet.png", true,8);
+		super(100,6,3,"resources/adventureSpritesheet.png", true,8);
 		groundHeight = yPos;
-		projectileImage = "file:resources/Aircutter.png";
-		leftProjectileImage = "file:resources/Aircutter-left.png";
+		projectileImage = "resources/Aircutter.png";
+		leftProjectileImage = "resources/Aircutter-left.png";
 		setImage("idle");
 		setX(xPos);
 		setY(yPos);
@@ -86,13 +86,13 @@ public class Player_One extends Player{
 
 	}
 	public void playAttackSound() {
-		Media hurt = new Media(new File("file:resources/adventurerAttackSound.mp3").toURI().toString());
+		Media hurt = new Media(new File("src/resources/adventurerAttackSound.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
 		sound.play();	
 	}
 	
 	public void playDeathSound() {
-		Media hurt = new Media(new File("MinotaurDeathSound.mp3").toURI().toString());
+		Media hurt = new Media(new File("src/resources/MinotaurDeathSound.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
 		sound.play();		
 	}
