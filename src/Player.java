@@ -117,9 +117,9 @@ public class Player extends Actor implements Fighter{
 	public void knowbackLeft() {
 		if(getX()>4&&getX()<910) {
 				dx = -5;
-		  }	
+		  }
 		}
-
+	
 	
 	
 	

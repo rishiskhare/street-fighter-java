@@ -1,6 +1,7 @@
 import java.io.File;
 
 import javafx.geometry.Rectangle2D;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -9,11 +10,14 @@ public class Player_Two extends Player{
 	private int speed = 5;
 	private static MediaPlayer sound = null;
 	public Player_Two(int xPos,int yPos) {
-		super(150,8,4,"file:resources/cow.png", false, 5);
+		super(150,8,4, Player.class.getClassLoader().getResource("resources/cow.png").toString()
+		, false, 5);
 		setImage("idleLeft");
 		groundHeight = yPos;
-		projectileImage = "file:resources/throwingAxe.png";
-		leftProjectileImage = "file:resources/throwingAxe-left.png";
+		String path = Player.class.getClassLoader().getResource("resources/throwingAxe.png").toString();
+		projectileImage = path;
+		String pathL = Player.class.getClassLoader().getResource("resources/throwingAxe-left.png").toString();
+		leftProjectileImage = pathL;
 		setX(xPos);
 		setY(yPos);
 		setFitWidth(240);

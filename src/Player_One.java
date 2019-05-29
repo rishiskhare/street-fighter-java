@@ -18,10 +18,13 @@ public class Player_One extends Player{
 	
 	public Player_One(int xPos, int yPos) {
 		
-		super(100,6,3,"file:resources/adventurerSpritesheet.png", true,8); 
+		super(100,6,3,Player.class.getClassLoader().getResource("resources/adventurerSpritesheet.png").toString()
+		, true,8); 
 		groundHeight = yPos;
-		projectileImage = "file:resources/Aircutter.png";
-		leftProjectileImage = "file:resources/Aircutter-left.png";
+		String path = Player.class.getClassLoader().getResource("resources/Aircutter.png").toString();
+		projectileImage = path;
+		String pathL = Player.class.getClassLoader().getResource("resources/Aircutter-left.png").toString();
+		leftProjectileImage = pathL;
 		setImage("idle");
 		setX(xPos);
 		setY(yPos);
@@ -83,7 +86,8 @@ public class Player_One extends Player{
 
 	}
 	public void playAttackSound() {
-		Media hurt = new Media(new File("file:resources/adventurerAttackSound.mp3").toURI().toString());
+		String soundEffPath = GameEngine.class.getClassLoader().getResource("resources/adventurerAttackSound.mp3").toString();
+		Media hurt = new Media(soundEffPath); //.toURI().toString()
 		sound = new MediaPlayer(hurt);
 		sound.play();
 		
@@ -93,8 +97,10 @@ public class Player_One extends Player{
 	public void powerUp() {	
 		poweredUp = true;
 		System.out.println("in power up method");
-		projectileImage = "file:resources/PowerUp.png";
-		leftProjectileImage = "file:resources/PowerUpLeft.png";
+		String path = Player.class.getClassLoader().getResource("resources/PowerUp.png").toString();
+		projectileImage = path;
+		String pathL = Player.class.getClassLoader().getResource("resources/PowerUpLeft.png").toString();
+		leftProjectileImage = pathL;
 		setMeleeDamage(50);
 	}
 	
