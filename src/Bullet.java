@@ -24,6 +24,12 @@ public class Bullet extends Actor{
 		Bullet bull = getOneIntersectingObject(Bullet.class);
 		
 		if(player!= null&& player!= shooter) {
+			player.setHurt(true);
+			if(player.getDirection()) {
+				player.setImage("hurt");
+			}else {
+				player.setImage("hurtLeft");
+			}
 			getWorld().remove(this);
 			player.takeDamage(shooter.getProjectileDamage());
 			if(player.getClass() == Player_One.class) {

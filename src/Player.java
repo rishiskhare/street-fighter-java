@@ -15,11 +15,12 @@ public class Player extends Actor implements Fighter{
 	public int bulletHeight;
 	public double dx = 0;
 	double currentX;
+	boolean isHurt;
 	private Image i;
 	int aniCounter = 0;
 	
-	public Player(int health, int melee, int projectile, String image, boolean direct,int jumpHeight) {
-		i = new Image(image);
+	public Player(int health, int melee, int projectile, String path, boolean direct,int jumpHeight) {
+		i = new Image(path);
 		setImage(i);
 		this.health = health;
 		meleeDamage = melee;
@@ -48,7 +49,13 @@ public class Player extends Actor implements Fighter{
 	if(player!= null) {
 		player.takeDamage(getMeleeDamage());
 		GameEngine.updatePlayerOneHealth();
-		GameEngine.updatePlayerTwoHealth();		
+		GameEngine.updatePlayerTwoHealth();
+		player.setHurt(true);
+		if(player.direction) {
+			player.setImage("hurt");
+		}else {
+			player.setImage("hurtLeft");
+		}
 			if(getX()<player.getX()) {
 				player.currentX = player.getX();
 				player.dx = 5;
@@ -60,8 +67,7 @@ public class Player extends Actor implements Fighter{
 			}
 		}
 	}		
-	
-	
+
 
 	@Override
 	public void shoot() {
@@ -100,6 +106,7 @@ public class Player extends Actor implements Fighter{
     	getWorld().add(bullet);
 	}
 	public void jump(){
+		setHurt(false);
 		if(direction) {
 			setImage("jump");
 		}else {
@@ -152,6 +159,12 @@ public class Player extends Actor implements Fighter{
 	}
 	public void setDirection(boolean direction) {
 		this.direction = direction;
+	}
+	public boolean getHurt() {
+		return direction;
+	}
+	public void setHurt(boolean hurt) {
+		this.isHurt = hurt;
 	}
 	public void setImage(int x, int y, int width, int height) {
 		this.setViewport(new Rectangle2D(x, y, width, height));

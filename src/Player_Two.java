@@ -9,11 +9,12 @@ import javafx.scene.media.MediaPlayer;
 public class Player_Two extends Player{
 	private int speed = 5;
 	private static MediaPlayer sound = null;
+
 	public Player_Two(int xPos,int yPos) {
-		super(150,8,4, Player.class.getClassLoader().getResource("resources/cow.png").toString()
-		, false, 5);
+		super(150,8,4,"resources/minotaurSpritesheet.png", false, 5);
 		setImage("idleLeft");
 		groundHeight = yPos;
+
 		String path = Player.class.getClassLoader().getResource("resources/throwingAxe.png").toString();
 		projectileImage = path;
 		String pathL = Player.class.getClassLoader().getResource("resources/throwingAxe-left.png").toString();
@@ -56,6 +57,7 @@ public class Player_Two extends Player{
 				setImage("run");
 			}
             move(speed,0);  
+            setHurt(false);
             setDirection(true);
         }
         if (getWorld().isKeyDown(KeyCode.LEFT)) {
@@ -63,10 +65,11 @@ public class Player_Two extends Player{
         		setImage("runLeft");
         	}
         	move(-speed,0); 
+        	setHurt(false);
         	setDirection(false);
         } 
         if(!getWorld().isKeyDown(KeyCode.LEFT)&&!getWorld().isKeyDown(KeyCode.RIGHT)&&!getWorld().isKeyDown(KeyCode.O)&&
-        		getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.P)){
+        		getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.P)&&!isHurt){
         	if(getDirection()) {
         		setImage("idle");
         	}else if(!getDirection()) {
@@ -77,11 +80,18 @@ public class Player_Two extends Player{
 	}
 
 	public void playAttackSound() {
-		Media hurt = new Media(new File("file:resources/minotaurAttackSound.mp3").toURI().toString());
+		Media hurt = new Media(new File("src/resources/minotaurAttackSound.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
 		sound.play();		
 	}
 	
+	public void playDeathSound() {
+		Media hurt = new Media(new File("src/resources/MinotaurDeathSound.mp3").toURI().toString());
+		sound = new MediaPlayer(hurt);
+		sound.play();		
+	}
+	
+
 	public void playerPowerUp() {
 		setMeleeDamage(50);
 		if (getDirection()) {
@@ -91,15 +101,7 @@ public class Player_Two extends Player{
 		}
 	}
 	
-	@Override
-	public void attack() {
-		Player p1 = this.getOneIntersectingObject(Player.class);
-		if (p1.getHealth() < 80) {
-			playerPowerUp();
-		}
-	}
-	
-	
+		
 	@Override
 	public void setImage(String str) {
 		switch (str) {
@@ -140,10 +142,10 @@ public class Player_Two extends Player{
 			this.setViewport(new Rectangle2D(0, 1595, 150, 145));
 			break;
 		case "shoot":
-			this.setViewport(new Rectangle2D(0, 1740, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1885, 150, 145));
 			break;
 		case "shootLeft":
-			this.setViewport(new Rectangle2D(0, 1885, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1740, 150, 145));
 			break;
 
 		}

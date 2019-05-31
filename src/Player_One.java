@@ -18,8 +18,8 @@ public class Player_One extends Player{
 	
 	public Player_One(int xPos, int yPos) {
 		
-		super(100,6,3,Player.class.getClassLoader().getResource("resources/adventurerSpritesheet.png").toString()
-		, true,8); 
+
+		super(100,6,3,"resources/adventureSpritesheet.png", true,8);
 		groundHeight = yPos;
 		String path = Player.class.getClassLoader().getResource("resources/Aircutter.png").toString();
 		projectileImage = path;
@@ -63,17 +63,19 @@ public class Player_One extends Player{
 				setImage("run");
 			}
             move(speed,0);
+            setHurt(false);
             setDirection(true);
         }
         if (getWorld().isKeyDown(KeyCode.A)) {
         	if(getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.F)&&!getWorld().isKeyDown(KeyCode.E)) {
         		setImage("runLeft");
         	}
-        	move(-speed,0);  
+        	move(-speed,0);
+        	setHurt(false);
         	setDirection(false);
         } 
         if(!getWorld().isKeyDown(KeyCode.A)&&!getWorld().isKeyDown(KeyCode.D)&&!getWorld().isKeyDown(KeyCode.F)&&
-        		getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.E)){
+        		getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.E)&& !isHurt){
         	if(getDirection()) {
         		setImage("idle");
         	}else if(!getDirection()) {
@@ -86,118 +88,112 @@ public class Player_One extends Player{
 
 	}
 	public void playAttackSound() {
-		String soundEffPath = GameEngine.class.getClassLoader().getResource("resources/adventurerAttackSound.mp3").toString();
-		Media hurt = new Media(soundEffPath); //.toURI().toString()
+
+		Media hurt = new Media(new File("src/resources/adventurerAttackSound.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
-		sound.play();
-		
+		sound.play();	
 	}
 	
-	//POWER UPS
+	public void playDeathSound() {
+		Media hurt = new Media(new File("src/resources/MinotaurDeathSound.mp3").toURI().toString());
+		sound = new MediaPlayer(hurt);
+		sound.play();		
+	}
+	
+	
 	public void powerUp() {	
 		poweredUp = true;
 		System.out.println("in power up method");
-		String path = Player.class.getClassLoader().getResource("resources/PowerUp.png").toString();
-		projectileImage = path;
-		String pathL = Player.class.getClassLoader().getResource("resources/PowerUpLeft.png").toString();
-		leftProjectileImage = pathL;
 		setMeleeDamage(50);
+		if(getDirection())setImage("powerUp");
+		else setImage("powerUpLeft");
 	}
 	
-	
-	@Override
-	public void attack() {
-		Player player = getOneIntersectingObject(Player.class);
-		if(this.getDirection() && poweredUp) { //if facing right 
-			setImage("powerUp"); 
-			//when I change this, the picture doesnt get changed on the screen. why?
-		}else if (!this.getDirection() && poweredUp){ //if facing left
-			setImage("powerUpLeft");
-		} else if (!poweredUp && this.getDirection()) {
-			setImage("attack");
-		} else if (!poweredUp && !this.getDirection()) {
-			setImage("attackLeft");
-		}
-		if(player!= null) {
-			player.takeDamage(getMeleeDamage());
-			System.out.println("hit");
-			GameEngine.updatePlayerOneHealth();
-			GameEngine.updatePlayerTwoHealth();
-			GameEngine.playHurtSound();
-			if(player.getX()>4&&player.getX()<920) {
-				if(getX()<player.getX()) {
-					player.currentX = player.getX();
-					player.dx = 5;
-					player.dy = -2;
-				}else if(getX()>player.getX()) {
-					player.currentX = player.getX();
-					player.dx = -5;
-					player.dy = -2;
-				}
-			}
-		}		
-	}
-
 	
 	@Override
 	public void setImage(String str) {
-		switch (str) {
-		case "idle":
-			this.setViewport(new Rectangle2D(1050, 0, 150, 145));
-			break;
-		case "idleLeft":
-			this.setViewport(new Rectangle2D(900, 0, 150, 145));
-			break;
-		case "jump":
-			this.setViewport(new Rectangle2D(1200, 0, 150, 145));
-			break;
-		case "jumpLeft":
-			this.setViewport(new Rectangle2D(1350, 0, 150, 145));
-			break;
-		case "attack":
-			this.setViewport(new Rectangle2D(0, 0, 150, 145));
-			break;
-		case "attackLeft":
-			this.setViewport(new Rectangle2D(150, 0, 150, 145));
-			break;
-		case "die":
-			this.setViewport(new Rectangle2D(450, 0, 150, 145));
-			break;
-		case "dieLeft":
-			this.setViewport(new Rectangle2D(300, 0, 150, 145));
-			break;
-		case "run":
-			this.setViewport(new Rectangle2D(1650, 0, 150, 145));
-			break;
-		case "runLeft":
-			this.setViewport(new Rectangle2D(1500, 0, 150, 145));
-			break;
-		case "shoot":
-			this.setViewport(new Rectangle2D(0, 0, 150, 145));
-			break;
-		case "shootLeft":
-			this.setViewport(new Rectangle2D(150, 0, 150, 145));
-			break;
-		case "hurt":
-			this.setViewport(new Rectangle2D(600, 0, 150, 145));
-			break;
-		case "hurtLeft":
-			this.setViewport(new Rectangle2D(750, 0, 150, 145));
-			break;
-		case "powerUp":
-			//Image im = new Image ("file:UpdatedPlayer1Right.png");
-			//String path = getClass().getClassLoader().getResource("resources/UpdatedPlayer1Right.png").toString();
-
-			//this.setImage(path);
-			System.out.println("powered up");
-			break;
-		case "powerUpLeft":
-			//Image imLeft = new Image ("UpdatedPlayer1Left copy.png");
-			//this.setImage(imLeft);
-			System.out.println("powered up(L)");
+		
+		if(this.getImage().impl_getUrl().contentEquals(Player.class.getClassLoader().getResource("resources/adventureSpritesheet.png").toString())) {
+			switch (str) {
+			case "idle":
+				this.setViewport(new Rectangle2D(0, 1015, 150, 145));
+				break;
+			case "idleLeft":
+				this.setViewport(new Rectangle2D(0, 870, 150, 145));
+				break;
+			case "jump":
+				this.setViewport(new Rectangle2D(0, 1305, 150, 145));
+				break;
+			case "jumpLeft":
+				this.setViewport(new Rectangle2D(0, 1160, 150, 145));
+				break;
+			case "attack":
+				this.setViewport(new Rectangle2D(0, 0, 150, 145));
+				break;
+			case "attackLeft":
+				this.setViewport(new Rectangle2D(0, 145, 150, 145));
+				break;
+			case "die":
+				this.setViewport(new Rectangle2D(0, 435, 150, 145));
+				break;
+			case "dieLeft":
+				this.setViewport(new Rectangle2D(300, 290, 150, 145));
+				break;
+			case "run":
+				this.setViewport(new Rectangle2D(0, 1595, 150, 145));
+				break;
+			case "runLeft":
+				this.setViewport(new Rectangle2D(0, 1450, 150, 145));
+				break;
+			case "shoot":
+				this.setViewport(new Rectangle2D(0, 1885, 150, 145));
+				break;
+			case "shootLeft":
+				this.setViewport(new Rectangle2D(0, 1740, 150, 145));
+				break;
+			case "hurt":
+				this.setViewport(new Rectangle2D(0, 725, 150, 145));
+				break;
+			case "hurtLeft":
+				this.setViewport(new Rectangle2D(0, 580, 150, 145));
+				break;
+			case "powerUp":
+				String path = getClass().getClassLoader().getResource("resources/UpdatedPlayer1Right.png").toString();
+				Image im = new Image(path);
+				this.setImage(im);
+				this.setViewport(null); 
+				break;
+			case "powerUpLeft":
+				String pathL = getClass().getClassLoader().getResource("resources/UpdatedPlayer1Left copy.png").toString();
+				Image imL = new Image(pathL);
+				this.setImage(imL);
+				this.setViewport(null); 
+				System.out.println("power up left");
+				break;
+			}
 			
-			break;
+		} else if (this.getImage().impl_getUrl().contentEquals(Player.class.getClassLoader().getResource("resources/UpdatedPlayer1Right.png").toString())
+				|| this.getImage().impl_getUrl().contentEquals(Player.class.getClassLoader().getResource("resources/UpdatedPlayer1Left copy.png").toString())){
+			switch(str) {
+			case "run":
+				String path = getClass().getClassLoader().getResource("resources/UpdatedPlayer1Right.png").toString();
+				Image im = new Image(path);
+				this.setImage(im);
+				this.setViewport(null);
+				break;
+			case "runLeft":
+				String pathL = getClass().getClassLoader().getResource("resources/UpdatedPlayer1Left copy.png").toString();
+				Image imL = new Image(pathL);
+				this.setImage(imL);
+				this.setViewport(null);
+				break;
+			}
+			//not sure if I need to make cases for each of the other options?
 		}
+	}
+	
+	public boolean hasPoweredUp() {
+		return poweredUp;
 	}
 
   }
