@@ -134,7 +134,6 @@ public class Player extends Actor implements Fighter{
 		if(this.getY() >= groundHeight){
 			dy = -jumpDy;
 		}
-		System.out.println(getY());
 	}
 
 	

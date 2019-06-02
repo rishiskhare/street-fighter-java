@@ -10,7 +10,7 @@ public class Cyclops extends Player{
 	private static MediaPlayer sound = null;
 	
 	public Cyclops(Boolean playerNum) {
-		super(150,4,7,"resources/cyclopsSpritesheet.png", true,4);
+		super(150,6,7,"resources/cyclopsSpritesheet.png", true,4);
 		xPos = 200;
 		yPos = 210;
 		groundHeight = yPos;
@@ -133,11 +133,14 @@ public class Cyclops extends Player{
 	//POWER UPS
 	public void playerPowerUp() {	
 		poweredUp = true;
-		speed = 8;
-		jumpDy = 8;
-		setProjectileDamage(8);
+		speed = 6;
+		setMeleeDamage(12);
 	}
-	
+	public void playerPowerDown() {
+		poweredUp = false;
+		speed = 3;
+		setMeleeDamage(6);
+	}
 	
 	@Override
 	public void setImage(String str) {

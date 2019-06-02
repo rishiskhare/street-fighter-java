@@ -141,17 +141,22 @@ public class Adventurer extends Player{
 	public void playJumpSound() {
 		Media hurt = new Media(new File("src/resources/jump.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
+		sound.setVolume(1);
 		sound.play();	
 	}
 	//POWER UPS
 	public void playerPowerUp() {	
 		poweredUp = true;
-		System.out.println("in power up method");
 		projectileImage = "resources/PowerUp.png";
 		leftProjectileImage = "resources/PowerUpLeft.png";
 		setProjectileDamage(8);
 	}
-	
+	public void playerPowerDown() {
+		poweredUp = false;
+		setProjectileDamage(3);
+		projectileImage = "resources/Aircutter.png";
+		leftProjectileImage = "resources/Aircutter-left.png";
+	}
 	
 	@Override
 	public void setImage(String str) {
@@ -197,20 +202,6 @@ public class Adventurer extends Player{
 			break;
 		case "hurtLeft":
 			this.setViewport(new Rectangle2D(0, 580, 150, 145));
-			break;
-		case "powerUp":
-			//Image im = new Image ("file:UpdatedPlayer1Right.png");
-			//String path = getClass().getClassLoader().getResource("resources/UpdatedPlayer1Right.png").toString();
-
-			//this.setImage(path);
-			System.out.println("powered up");
-			break;
-		case "powerUpLeft":
-			//Image imLeft = new Image ("UpdatedPlayer1Left copy.png");
-			//this.setImage(imLeft);
-			System.out.println("powered up(L)");
-			
-
 			break;
 		}
 	}

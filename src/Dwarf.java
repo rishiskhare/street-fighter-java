@@ -10,11 +10,11 @@ public class Dwarf extends Player{
 	private static MediaPlayer sound = null;
 	
 	public Dwarf(Boolean playerNum) {
-		super(125,5,10,"resources/dwarfSpritesheet.png", true,4);
+		super(90,4,10,"resources/dwarfSpritesheet.png", true,4);
 		xPos = 200;
 		yPos = 280;
 		groundHeight = yPos;
-		defaultHealth = 75;
+		defaultHealth = 90;
 		projectileImage = "resources/bomb.png";
 		leftProjectileImage = "resources/bomb.png";
 		setImage("idle");
@@ -135,11 +135,13 @@ public class Dwarf extends Player{
 	//POWER UPS
 	public void playerPowerUp() {	
 		poweredUp = true;
-		speed = 8;
-		jumpDy = 8;
-		setProjectileDamage(8);
+		setMeleeDamage(8);
+		setHealth(getHealth()+8);
 	}
-	
+	public void playerPowerDown() {
+		poweredUp = false;
+		setMeleeDamage(5);
+	}
 	
 	@Override
 	public void setImage(String str) {

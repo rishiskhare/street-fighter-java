@@ -1,4 +1,6 @@
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TimerTask;
 
 import javafx.application.Application;
@@ -44,12 +46,24 @@ public class GameEngine extends Application {
 	public static BorderPane root;
 	static HBox restartBox;
 	static Text winText;
-	ImageView backgroundImageView;
+
+	private static HealthBar p1HealthBar;
+	private static HealthBar p2HealthBar;
+	private double p1healthX;
+	private double p1healthY;
+	private double p1healthWidth;
+	private double p1healthHeight;
+	private double p2healthX;
+	private double p2healthY;
+	private double p2healthWidth;
+	private double p2healthHeight;
 
 	public static void main(String[] args) {
 		launch();
 	}
+
 	private static FighterWorld fWorld = new FighterWorld();
+
 	@Override
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("Fighter");
@@ -57,18 +71,27 @@ public class GameEngine extends Application {
 		scene = new Scene(root, 1000, 500);
 		playerOne = new Adventurer(true);
 		playerTwo = new Minotaur(false);
+		
+		Media hurt = new Media(new File("src/resources/backgroundMusic.mp3").toURI().toString());
+		sound = new MediaPlayer(hurt);		
+		sound.setCycleCount(MediaPlayer.INDEFINITE);
+		sound.setVolume(0.2);
+		sound.play();	
 
-		playeOneHealth = new Text("Health: " + playerOne.getHealth());
-		playeOneHealth.setFill(Color.CORNFLOWERBLUE);
-		playeOneHealth.setFont(Font.font(java.awt.Font.SERIF, 25));
-		playeOneHealth.setX(50);
-		playeOneHealth.setY(45);
+		p1healthWidth = playerOne.defaultHealth;
+		p1healthHeight = 20;
+		p1healthX = 20;
+		p1healthY = 20;
 
-		playerTwoHealth = new Text("Health: " + playerTwo.getHealth());
-		playerTwoHealth.setFill(Color.MAROON);
-		playerTwoHealth.setFont(Font.font(java.awt.Font.SERIF, 25));
-		playerTwoHealth.setX(650);
-		playerTwoHealth.setY(45);
+		p2healthWidth = playerTwo.defaultHealth;
+		p2healthHeight = 20;
+		p2healthX = 800;
+		p2healthY = 20;
+
+		p1HealthBar = new HealthBar(playerOne.defaultHealth, p1healthWidth, p1healthHeight, p1healthX, p1healthY,
+				playerOne);
+		p2HealthBar = new HealthBar(playerTwo.defaultHealth, p2healthWidth, p2healthHeight, p2healthX, p2healthY,
+				playerTwo);
 
 		Image image = new Image("resources/ArenaBackground.jpg");
 		ImageView backgroundImageView = new ImageView(image);
@@ -79,12 +102,13 @@ public class GameEngine extends Application {
 
 		fWorld.add(playerOne);
 		fWorld.add(playerTwo);
-		fWorld.add(playeOneHealth);
-		fWorld.add(playerTwoHealth);
+
+		fWorld.add(p1HealthBar);
+		fWorld.add(p2HealthBar);
 		root.getChildren().add(fWorld);
 		root.setAlignment(fWorld, Pos.CENTER);
 
-		//Code for menu
+		// Code for menu
 		HBox menuBox = new HBox(10);
 		Menu characterMenu = new Menu("Choose Characters");
 		MenuBar menuBar = new MenuBar();
@@ -110,12 +134,12 @@ public class GameEngine extends Application {
 		menuBox.setHgrow(menuBar, Priority.ALWAYS);
 		root.setTop(menuBox);
 		//
-		
+
 		stage.setScene(scene);
 		stage.show();
 
 		scene.setOnKeyPressed(event -> {
-			System.out.println("doot");
+
 			if (event.getCode() == KeyCode.D) {
 				fWorld.addKeyCode(KeyCode.D);
 			}
@@ -129,38 +153,38 @@ public class GameEngine extends Application {
 				fWorld.addKeyCode(KeyCode.RIGHT);
 			}
 			if (event.getCode() == KeyCode.E) {
-				if (!playerOne.getWorld().isKeyDown(KeyCode.E)&&gameOver) {
+				if (!playerOne.getWorld().isKeyDown(KeyCode.E) && gameOver) {
 					playerOne.shoot();
 				}
 				fWorld.addKeyCode(KeyCode.E);
 			}
 			if (event.getCode() == KeyCode.P) {
-				if (!playerOne.getWorld().isKeyDown(KeyCode.P)&&gameOver) {
+				if (!playerOne.getWorld().isKeyDown(KeyCode.P) && gameOver) {
 					playerTwo.shoot();
 				}
 				fWorld.addKeyCode(KeyCode.P);
-				
+
 			}
 			if (event.getCode() == KeyCode.W) {
-				if (!playerOne.getWorld().isKeyDown(KeyCode.W)&&gameOver) {
+				if (!playerOne.getWorld().isKeyDown(KeyCode.W) && gameOver) {
 					playerOne.jump();
 				}
 				fWorld.addKeyCode(KeyCode.W);
 			}
 			if (event.getCode() == KeyCode.UP) {
-				if (!playerOne.getWorld().isKeyDown(KeyCode.UP)&&gameOver) {
+				if (!playerOne.getWorld().isKeyDown(KeyCode.UP) && gameOver) {
 					playerTwo.jump();
 				}
 				fWorld.addKeyCode(KeyCode.UP);
 			}
 			if (event.getCode() == KeyCode.F) {
-				if (!playerOne.getWorld().isKeyDown(KeyCode.F)&&gameOver) {
+				if (!playerOne.getWorld().isKeyDown(KeyCode.F) && gameOver) {
 					playerOne.attack();
 				}
 				fWorld.addKeyCode(KeyCode.F);
 			}
 			if (event.getCode() == KeyCode.O) {
-				if (!playerOne.getWorld().isKeyDown(KeyCode.O)&&gameOver) {
+				if (!playerOne.getWorld().isKeyDown(KeyCode.O) && gameOver) {
 					playerTwo.attack();
 				}
 				fWorld.addKeyCode(KeyCode.O);
@@ -203,9 +227,9 @@ public class GameEngine extends Application {
 
 		});
 	}
-	
+
 //Selection Screen Methods
-	
+
 	public static void playerOneSelectionScreen() {
 		VBox selectionBox = new VBox(10);
 		HBox rowOne = new HBox(10);
@@ -227,7 +251,7 @@ public class GameEngine extends Application {
 		rowOne.setAlignment(Pos.CENTER);
 		rowTwo.getChildren().addAll(cyclopsButton, dwarfButton, gladiatorButton);
 		rowTwo.setAlignment(Pos.CENTER);
-		selectionBox.getChildren().addAll(rowOne,rowTwo);
+		selectionBox.getChildren().addAll(rowOne, rowTwo);
 		selectionBox.setAlignment(Pos.CENTER);
 		root.setCenter(selectionBox);
 		adventurerButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -291,6 +315,7 @@ public class GameEngine extends Application {
 			}
 		});
 	}
+
 	public static void playerTwoSelectionScreen() {
 		VBox selectionBox = new VBox(10);
 		HBox rowOne = new HBox(10);
@@ -312,7 +337,7 @@ public class GameEngine extends Application {
 		rowOne.setAlignment(Pos.CENTER);
 		rowTwo.getChildren().addAll(cyclopsButton, dwarfButton, gladiatorButton);
 		rowTwo.setAlignment(Pos.CENTER);
-		selectionBox.getChildren().addAll(rowOne,rowTwo);
+		selectionBox.getChildren().addAll(rowOne, rowTwo);
 		selectionBox.setAlignment(Pos.CENTER);
 		root.setCenter(selectionBox);
 		adventurerButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -377,15 +402,18 @@ public class GameEngine extends Application {
 		});
 	}
 
-	
-	
 	public static void restartGame() {
+		sound.play();
 		playerOne.setX(200);
 		playerOne.setY(playerOne.yPos);
 		playerTwo.setX(600);
 		playerTwo.setY(playerTwo.yPos);
 		playerOne.setHealth(playerOne.defaultHealth);
 		playerTwo.setHealth(playerTwo.defaultHealth);
+		p1HealthBar.player = playerOne;
+		p2HealthBar.player = playerTwo;
+		p1HealthBar.setFitWidth(playerOne.defaultHealth);
+		p2HealthBar.setFitWidth(playerTwo.defaultHealth);
 		playerOne.setDirection(true);
 		playerTwo.setDirection(false);
 		playerOne.setImage("idle");
@@ -394,6 +422,10 @@ public class GameEngine extends Application {
 		playerTwo.setMeleeDamage(8);
 		playerOne.playerPowerDown();
 		playerTwo.playerPowerDown();
+		List<Bullet> bullets = fWorld.getObjects(Bullet.class);
+		for(int i = 0 ; i< bullets.size(); i++) {
+			fWorld.remove(bullets.get(i));
+		}
 		updatePlayerOneHealth();
 		updatePlayerTwoHealth();
 		root.getChildren().remove(restartBox);
@@ -402,14 +434,13 @@ public class GameEngine extends Application {
 		fWorld.start();
 	}
 
-
 	public static void updatePlayerOneHealth() {
-		playeOneHealth.setText("Health: " + playerOne.getHealth());
 		if (playerOne.getHealth() <= 80) {
 			playerOne.playerPowerUp();
-			System.out.println("updated");
 		}
 		if (playerOne.getHealth() <= 0 && gameOver) {
+			sound.pause();
+			p1HealthBar.setFitWidth(0);
 			winText = new Text("Player Two Wins");
 			winText.setX(310);
 			winText.setY(200);
@@ -445,12 +476,11 @@ public class GameEngine extends Application {
 	public static void updatePlayerTwoHealth() {
 		if (playerTwo.getHealth() <= 80 && !playerTwo.poweredUp) {
 			playerTwo.playerPowerUp();
-			System.out.println("updated");
+
 		}
-		playerTwoHealth.setText("Health: " + playerTwo.getHealth());
 		if (playerTwo.getHealth() <= 0 && gameOver) {
-		}
-		if (playerTwo.getHealth() <= 0) {
+			sound.pause();
+			p2HealthBar.setFitWidth(0);
 			winText = new Text("Player One Wins");
 			winText.setX(310);
 			winText.setY(200);
@@ -483,5 +513,3 @@ public class GameEngine extends Application {
 	}
 }
 //do cyclops
-
-

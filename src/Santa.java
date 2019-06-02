@@ -16,7 +16,7 @@ public class Santa extends Player{
 	private static MediaPlayer sound = null;
 	
 	public Santa(Boolean playerNum) {
-		super(125,4,7,"resources/santaSpritesheet.png", true,6);
+		super(125,4,6,"resources/santaSpritesheet.png", true,6);
 		xPos = 200;
 		yPos = 275;
 		groundHeight = yPos;
@@ -150,7 +150,12 @@ public class Santa extends Player{
 		jumpDy = 8;
 		setProjectileDamage(8);
 	}
-	
+	public void playerPowerDown() {
+		poweredUp = false;
+		speed = 6;
+		jumpDy = 6;
+		setProjectileDamage(6);
+	}
 	
 	@Override
 	public void setImage(String str) {

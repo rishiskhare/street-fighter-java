@@ -6,11 +6,11 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 public class Gladiator extends Player{
-	private int speed = 3;
+	private int speed = 5;
 	private static MediaPlayer sound = null;
 	
 	public Gladiator(Boolean playerNum) {
-		super(150,4,7,"resources/gladiatorSpritesheet.png", true,6);
+		super(125,6,2,"resources/gladiatorSpritesheet.png", true,6);
 		xPos = 200;
 		yPos = 280;
 		groundHeight = yPos;
@@ -136,10 +136,13 @@ public class Gladiator extends Player{
 	public void playerPowerUp() {	
 		poweredUp = true;
 		speed = 8;
-		jumpDy = 8;
-		setProjectileDamage(8);
+		setProjectileDamage(5);
 	}
-	
+	public void playerPowerDown() {
+		poweredUp = false;
+		speed = 6;
+		setProjectileDamage(2);
+	}
 	
 	@Override
 	public void setImage(String str) {
