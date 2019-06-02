@@ -32,10 +32,16 @@ public class Bullet extends Actor{
 			}
 			getWorld().remove(this);
 			player.takeDamage(shooter.getProjectileDamage());
-			if(player.getClass() == Player_One.class) {
-				GameEngine.updatePlayerOneHealth();
-			}else if(player.getClass() == Player_Two.class) {
-				GameEngine.updatePlayerTwoHealth();
+			GameEngine.updatePlayerOneHealth();
+			GameEngine.updatePlayerTwoHealth();
+			if(getX()<player.getX()) {
+				player.currentX = player.getX();
+				player.dx = 2;
+				player.dy = -2;
+			}else if(getX()>player.getX()) {
+				player.currentX = player.getX();
+				player.dx = -2;
+				player.dy = -2;
 			}
 		}else if(bull!= null&& shooter!= bull.shooter) {
 			getWorld().remove(this);

@@ -10,17 +10,17 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.image.Image;
 
 
-public class Player_One extends Player{
+public class Adventurer extends Player{
 
 	private int speed = 10;
 	private static MediaPlayer sound = null;
-	private boolean poweredUp = false;
 	
-	public Player_One(int xPos, int yPos) {
-		
-
+	public Adventurer(Boolean playerNum) {
 		super(100,6,3,"resources/adventureSpritesheet.png", true,8);
+		xPos = 200;
+		yPos = 250;
 		groundHeight = yPos;
+		defaultHealth = 100;
 		projectileImage = "resources/Aircutter.png";
 		leftProjectileImage = "resources/Aircutter-left.png";
 		setImage("idle");
@@ -28,11 +28,19 @@ public class Player_One extends Player{
 		setY(yPos);
 		setFitWidth(140);
 		setFitHeight(150);
+		bulletHeight = 150;
+		bulletWidth = 60;
+		isPlayerOne = playerNum;
 	}
 	
 	@Override
 	public void act(long now) {	
-		bulletHeight = (int) (getY()+5);
+		if(getDirection()) {
+			bulletX = (int) (getX()+80);
+		}else {
+			bulletX = (int) (getX());
+		}
+		bulletY = (int) (getY()+15);
 		if(getX()> 1100) {
 			setX(-100);			
 		}
@@ -56,6 +64,7 @@ public class Player_One extends Player{
 		}else{
 			dy = 0;
 		}
+		if(isPlayerOne) {
 		if(getWorld().isKeyDown(KeyCode.D)) {
 			if(getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.F)&&!getWorld().isKeyDown(KeyCode.E)) {
 				setImage("run");
@@ -80,6 +89,33 @@ public class Player_One extends Player{
         		setImage("idleLeft");
         	}
         }
+		}else if(!isPlayerOne) {
+	        if (getWorld().isKeyDown(KeyCode.LEFT)) {
+	        	if(getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
+	        		setImage("runLeft");
+	        	}
+	        	System.out.println("run");
+	        	move(-speed,0); 
+	        	setHurt(false);
+	        	setDirection(false);
+	        } 
+			if(getWorld().isKeyDown(KeyCode.RIGHT)){
+				if(getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
+					setImage("run");
+				}
+	            move(speed,0);  
+	            setHurt(false);
+	            setDirection(true);
+	        }
+	        if(!getWorld().isKeyDown(KeyCode.LEFT)&&!getWorld().isKeyDown(KeyCode.RIGHT)&&!getWorld().isKeyDown(KeyCode.O)&&
+	        		getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.P)&&!isHurt){
+	        	if(getDirection()) {
+	        		setImage("idle");
+	        	}else if(!getDirection()) {
+	        		setImage("idleLeft");
+	        	}
+	        }		
+		}
         
         
         
@@ -92,18 +128,28 @@ public class Player_One extends Player{
 	}
 	
 	public void playDeathSound() {
-		Media hurt = new Media(new File("src/resources/MinotaurDeathSound.mp3").toURI().toString());
+		Media hurt = new Media(new File("src/resources/AdventureAndGladiatorDeath.mp3").toURI().toString());
 		sound = new MediaPlayer(hurt);
 		sound.play();		
 	}
 	
+	public void playShootingSound() {
+		Media hurt = new Media(new File("src/resources/bulletSoundEffect.mp3").toURI().toString());
+		sound = new MediaPlayer(hurt);
+		sound.play();	
+	}
+	public void playJumpSound() {
+		Media hurt = new Media(new File("src/resources/jump.mp3").toURI().toString());
+		sound = new MediaPlayer(hurt);
+		sound.play();	
+	}
 	//POWER UPS
-	public void powerUp() {	
+	public void playerPowerUp() {	
 		poweredUp = true;
 		System.out.println("in power up method");
-		projectileImage = "file:resources/PowerUp.png";
-		leftProjectileImage = "file:resources/PowerUpLeft.png";
-		setMeleeDamage(50);
+		projectileImage = "resources/PowerUp.png";
+		leftProjectileImage = "resources/PowerUpLeft.png";
+		setProjectileDamage(8);
 	}
 	
 	
@@ -132,7 +178,7 @@ public class Player_One extends Player{
 			this.setViewport(new Rectangle2D(0, 435, 150, 145));
 			break;
 		case "dieLeft":
-			this.setViewport(new Rectangle2D(300, 290, 150, 145));
+			this.setViewport(new Rectangle2D(0, 290, 150, 145));
 			break;
 		case "run":
 			this.setViewport(new Rectangle2D(0, 1595, 150, 145));
