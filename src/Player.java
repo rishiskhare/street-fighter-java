@@ -11,8 +11,11 @@ public class Player extends Actor implements Fighter{
 	public String leftProjectileImage;
 	public double dy = 0;
 	public int jumpDy;
+	public int groundHeight;
+	public int bulletHeight;
 	public double dx = 0;
 	double currentX;
+	boolean isHurt;
 	private Image i;
 	int aniCounter = 0;
 	
@@ -31,9 +34,12 @@ public class Player extends Actor implements Fighter{
 	void setImage(String image) {
 		
 	}
-	
+	void playAttackSound() {
+		
+	}
 	@Override
 	public void attack() {
+	playAttackSound();
 	Player player = getOneIntersectingObject(Player.class);
 	if(direction) {
 		setImage("attack");
@@ -42,11 +48,14 @@ public class Player extends Actor implements Fighter{
 	}
 	if(player!= null) {
 		player.takeDamage(getMeleeDamage());
-		System.out.println("hit");
 		GameEngine.updatePlayerOneHealth();
 		GameEngine.updatePlayerTwoHealth();
-		GameEngine.playHurtSound();
-		if(player.getX()>4&&player.getX()<920) {
+		player.setHurt(true);
+		if(player.direction) {
+			player.setImage("hurt");
+		}else {
+			player.setImage("hurtLeft");
+		}
 			if(getX()<player.getX()) {
 				player.currentX = player.getX();
 				player.dx = 5;
@@ -58,7 +67,7 @@ public class Player extends Actor implements Fighter{
 			}
 		}
 	}		
-	}
+
 
 	@Override
 	public void shoot() {
@@ -92,17 +101,18 @@ public class Player extends Actor implements Fighter{
     	bullet.setFitWidth(60);
     	bullet.setFitHeight(100);
     	bullet.setX(getX());
-    	bullet.setY(getY());
+    	bullet.setY(bulletHeight);
     	bullet.setImage(bulletImage);
     	getWorld().add(bullet);
 	}
 	public void jump(){
+		setHurt(false);
 		if(direction) {
 			setImage("jump");
 		}else {
 			setImage("jumpLeft");
 		}
-		if(this.getY() >= 250){
+		if(this.getY() >= groundHeight){
 			dy = -jumpDy;
 		}
 	}
@@ -149,6 +159,12 @@ public class Player extends Actor implements Fighter{
 	}
 	public void setDirection(boolean direction) {
 		this.direction = direction;
+	}
+	public boolean getHurt() {
+		return direction;
+	}
+	public void setHurt(boolean hurt) {
+		this.isHurt = hurt;
 	}
 	public void setImage(int x, int y, int width, int height) {
 		this.setViewport(new Rectangle2D(x, y, width, height));

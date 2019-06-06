@@ -58,9 +58,9 @@ public abstract class World extends javafx.scene.layout.Pane{
 	public void add(Text text){
 		super.getChildren().add(text);
 	}
-	
-	
-
+	public void remove(Text text) {
+		this.getChildren().remove(text);
+	}
 	public <A extends Actor> java.util.List<A> getObjects(Class<A> cls){
 		ObservableList<Node> list = this.getChildren();
 		ArrayList<A> newList = new ArrayList<A>();

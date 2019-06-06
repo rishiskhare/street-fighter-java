@@ -1,14 +1,28 @@
+import java.io.File;
+
 import javafx.geometry.Rectangle2D;
-import javafx.scene.image.Image;
+//import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+import javafx.scene.image.Image;
+
+
 public class Player_One extends Player{
+
 	private int speed = 10;
+	private static MediaPlayer sound = null;
+	private boolean poweredUp = false;
+	
 	public Player_One(int xPos, int yPos) {
 		
-		super(100,8,2,"sprite.png", true,8);
-		projectileImage = "Aircutter.png";
-		leftProjectileImage = "Aircutter-left.png";
+
+		super(100,6,3,"adventureSpritesheet.png", true,8);
+		groundHeight = yPos;
+		projectileImage = "file:resources/Aircutter.png";
+		leftProjectileImage = "file:resources/Aircutter-left.png";
 		setImage("idle");
 		setX(xPos);
 		setY(yPos);
@@ -17,7 +31,8 @@ public class Player_One extends Player{
 	}
 	
 	@Override
-	public void act(long now) {		
+	public void act(long now) {	
+		bulletHeight = (int) (getY()+5);
 		if(getX()> 1100) {
 			setX(-100);			
 		}
@@ -36,27 +51,29 @@ public class Player_One extends Player{
 				dy =0;
 			}
 		}
-		if(this.getY() < 250){
+		if(this.getY() < groundHeight){
 			dy = dy + 0.15;
 		}else{
 			dy = 0;
 		}
 		if(getWorld().isKeyDown(KeyCode.D)) {
-			if(getY()>=250&&!getWorld().isKeyDown(KeyCode.F)&&!getWorld().isKeyDown(KeyCode.E)) {
+			if(getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.F)&&!getWorld().isKeyDown(KeyCode.E)) {
 				setImage("run");
 			}
             move(speed,0);
+            setHurt(false);
             setDirection(true);
         }
         if (getWorld().isKeyDown(KeyCode.A)) {
-        	if(getY()>=250&&!getWorld().isKeyDown(KeyCode.F)&&!getWorld().isKeyDown(KeyCode.E)) {
+        	if(getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.F)&&!getWorld().isKeyDown(KeyCode.E)) {
         		setImage("runLeft");
         	}
-        	move(-speed,0);  
+        	move(-speed,0);
+        	setHurt(false);
         	setDirection(false);
         } 
         if(!getWorld().isKeyDown(KeyCode.A)&&!getWorld().isKeyDown(KeyCode.D)&&!getWorld().isKeyDown(KeyCode.F)&&
-        		getY()>=250&&!getWorld().isKeyDown(KeyCode.E)){
+        		getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.E)&& !isHurt){
         	if(getDirection()) {
         		setImage("idle");
         	}else if(!getDirection()) {
@@ -64,61 +81,90 @@ public class Player_One extends Player{
         	}
         }
         
-        //POWER UPS
+        
         
 
 	}
+	public void playAttackSound() {
+		Media hurt = new Media(new File("file:resources/adventurerAttackSound.mp3").toURI().toString());
+		sound = new MediaPlayer(hurt);
+		sound.play();	
+	}
 	
-	public void powerUp() {
-		projectileImage = "powerUpWeapon.png";
-		leftProjectileImage = "Aircutter-left.png"; //CHANGE IMAGES
+	public void playDeathSound() {
+		Media hurt = new Media(new File("MinotaurDeathSound.mp3").toURI().toString());
+		sound = new MediaPlayer(hurt);
+		sound.play();		
+	}
+	
+	//POWER UPS
+	public void powerUp() {	
+		poweredUp = true;
+		System.out.println("in power up method");
+		projectileImage = "file:resources/PowerUp.png";
+		leftProjectileImage = "file:resources/PowerUpLeft.png";
 		setMeleeDamage(50);
 	}
+	
 	
 	@Override
 	public void setImage(String str) {
 		switch (str) {
 		case "idle":
-			this.setViewport(new Rectangle2D(600, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1015, 150, 145));
 			break;
 		case "idleLeft":
-			this.setViewport(new Rectangle2D(750, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 870, 150, 145));
 			break;
 		case "jump":
-			this.setViewport(new Rectangle2D(1050, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1305, 150, 145));
 			break;
 		case "jumpLeft":
-			this.setViewport(new Rectangle2D(900, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1160, 150, 145));
 			break;
 		case "attack":
 			this.setViewport(new Rectangle2D(0, 0, 150, 145));
 			break;
 		case "attackLeft":
-			this.setViewport(new Rectangle2D(150, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 145, 150, 145));
 			break;
 		case "die":
-			this.setViewport(new Rectangle2D(450, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 435, 150, 145));
 			break;
 		case "dieLeft":
-			this.setViewport(new Rectangle2D(300, 0, 150, 145));
+			this.setViewport(new Rectangle2D(300, 290, 150, 145));
 			break;
 		case "run":
-			this.setViewport(new Rectangle2D(1350, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1595, 150, 145));
 			break;
 		case "runLeft":
-			this.setViewport(new Rectangle2D(1200, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1450, 150, 145));
 			break;
 		case "shoot":
-			this.setViewport(new Rectangle2D(0, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1885, 150, 145));
 			break;
 		case "shootLeft":
-			this.setViewport(new Rectangle2D(150, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 1740, 150, 145));
 			break;
 		case "hurt":
-			this.setViewport(new Rectangle2D(600, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 725, 150, 145));
 			break;
 		case "hurtLeft":
-			this.setViewport(new Rectangle2D(750, 0, 150, 145));
+			this.setViewport(new Rectangle2D(0, 580, 150, 145));
+			break;
+		case "powerUp":
+			//Image im = new Image ("file:UpdatedPlayer1Right.png");
+			//String path = getClass().getClassLoader().getResource("resources/UpdatedPlayer1Right.png").toString();
+
+			//this.setImage(path);
+			System.out.println("powered up");
+			break;
+		case "powerUpLeft":
+			//Image imLeft = new Image ("UpdatedPlayer1Left copy.png");
+			//this.setImage(imLeft);
+			System.out.println("powered up(L)");
+			
+
 			break;
 		}
 	}

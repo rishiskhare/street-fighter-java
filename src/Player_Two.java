@@ -1,63 +1,110 @@
+import java.io.File;
+
 import javafx.geometry.Rectangle2D;
 import javafx.scene.input.KeyCode;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class Player_Two extends Player{
-	private int speed = 2;
+	private int speed = 5;
+	private static MediaPlayer sound = null;
 	public Player_Two(int xPos,int yPos) {
-		super(150,10,2,"cow.png", false, 5);
+		super(150,8,4,"minotaurSpritesheet.png", false, 5);
 		setImage("idleLeft");
-		projectileImage = "throwingAxe.png";
-		leftProjectileImage = "throwingAxe-left.png";
+		groundHeight = yPos;
+		projectileImage = "file:resources/throwingAxe.png";
+		leftProjectileImage = "file:resources/throwingAxe-left.png";
 		setX(xPos);
 		setY(yPos);
+		setFitWidth(240);
+		setFitHeight(230);
 	}
 	@Override
 	public void act(long now) {
-		if(getX()> 1100) {
+		bulletHeight = (int) (getY() +95);
+		if (getX() > 1100) {
 			setX(-100);			
 		}
-		if(getX()<-200) {
-    		setX(1000);
+		if (getX() < -200) {
+			setX(1000);
 		}
-		if(getOneIntersectingObject(Player.class)!=null) {
+		if (getOneIntersectingObject(Player.class) != null) {
 			speed = 1;
-		}else {
+		} else {
 			speed = 2;
 		}
+
 		move(dx,dy);
-		if(dx!=0) {
-			if(Math.abs(getX()-currentX)> 60) {
+		if (dx != 0) {
+			if(Math.abs(getX() - currentX) > 60) {
 				dx = 0;
 			}
 		}
-		if(this.getY() < 250){
+
+		if(this.getY() < groundHeight){
 			dy = dy + 0.15;
-		}else{
+		} else {
 			dy = 0;
 		}
+
 		if(getWorld().isKeyDown(KeyCode.RIGHT)){
-			if(getY()>=250&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
+			if(getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
 				setImage("run");
 			}
             move(speed,0);  
+            setHurt(false);
             setDirection(true);
         }
         if (getWorld().isKeyDown(KeyCode.LEFT)) {
-        	if(getY()>=250&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
+        	if(getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
         		setImage("runLeft");
         	}
         	move(-speed,0); 
+        	setHurt(false);
         	setDirection(false);
         } 
         if(!getWorld().isKeyDown(KeyCode.LEFT)&&!getWorld().isKeyDown(KeyCode.RIGHT)&&!getWorld().isKeyDown(KeyCode.O)&&
-        		getY()>=250&&!getWorld().isKeyDown(KeyCode.P)){
+        		getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.P)&&!isHurt){
         	if(getDirection()) {
         		setImage("idle");
         	}else if(!getDirection()) {
         		setImage("idleLeft");
         	}
         }
+
 	}
+
+	public void playAttackSound() {
+		Media hurt = new Media(new File("file:resources/minotaurAttackSound.mp3").toURI().toString());
+		sound = new MediaPlayer(hurt);
+		sound.play();		
+	}
+	
+	public void playDeathSound() {
+		Media hurt = new Media(new File("MinotaurDeathSound.mp3").toURI().toString());
+		sound = new MediaPlayer(hurt);
+		sound.play();		
+	}
+	
+
+	public void playerPowerUp() {
+		setMeleeDamage(50);
+		if (getDirection()) {
+			setImage("powerUpP2Right");
+		} else {
+			setImage("powerUpP2Left");
+		}
+	}
+	
+	@Override
+	public void attack() {
+		Player p1 = this.getOneIntersectingObject(Player.class);
+		if (p1.getHealth() < 80) {
+			playerPowerUp();
+		}
+	}
+	
+	
 	@Override
 	public void setImage(String str) {
 		switch (str) {
@@ -98,12 +145,12 @@ public class Player_Two extends Player{
 			this.setViewport(new Rectangle2D(0, 1595, 150, 145));
 			break;
 		case "shoot":
-			this.setViewport(new Rectangle2D(0, 1740, 150, 145));
-			break;
-		case "shootLeft":
 			this.setViewport(new Rectangle2D(0, 1885, 150, 145));
 			break;
-			
+		case "shootLeft":
+			this.setViewport(new Rectangle2D(0, 1740, 150, 145));
+			break;
+
 		}
 	}
 }
