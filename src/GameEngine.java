@@ -1,7 +1,13 @@
+<<<<<<< HEAD
+import java.io.File;
+import javafx.scene.paint.Color;
+import java.util.TimerTask;
+=======
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
+>>>>>>> branch 'master' of https://rishiskhare@bitbucket.org/2019_p4_group_2/gameproject.git
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -42,16 +48,36 @@ public class GameEngine extends Application {
 	public static Text playerTwoHealth;
 	private static MediaPlayer sound = null;
 	private static Scene scene;
+	private static HealthBar p1HealthBar;
+	private static HealthBar p2HealthBar;
+	private int health;
+	private double p1healthX;
+	private double p1healthY;
+	private double p1healthWidth;
+	private double p1healthHeight;
+	private double p2healthX;
+	private double p2healthY;
+	private double p2healthWidth;
+	private double p2healthHeight;
+	private Color healthColor;
+	
 	public static boolean gameOver = true;
 	public static Button restartButton;
 	public static Button menuButton;
 	public static BorderPane root;
 	static HBox restartBox;
 	static Text winText;
+<<<<<<< HEAD
 	private static MenuBar menuBar;
 	private static MenuItem instructions;
 	private static WebView web;
 	private static Menu help;
+=======
+<<<<<<< HEAD
+	ImageView backgroundImageView;
+=======
+
+>>>>>>> branch 'master' of https://rishiskhare@bitbucket.org/2019_p4_group_2/gameproject.git
 	private static HealthBar p1HealthBar;
 	private static HealthBar p2HealthBar;
 	private double p1healthX;
@@ -63,6 +89,7 @@ public class GameEngine extends Application {
 	private double p2healthWidth;
 	private double p2healthHeight;
 
+>>>>>>> branch 'master' of https://rishiskhare@bitbucket.org/2019_p4_group_2/gameproject.git
 	public static void main(String[] args) {
 		launch();
 	}
@@ -73,6 +100,39 @@ public class GameEngine extends Application {
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("Fighter");
 		root = new BorderPane();
+<<<<<<< HEAD
+		scene = new Scene(root, 1000, 500);
+		
+		health = 100;
+		healthColor = Color.rgb(0, 255, 0);
+		
+		p1healthWidth = health;
+		p1healthHeight = 20;
+		p1healthX = 20;
+		p1healthY = 20;
+		
+		p2healthWidth = health;
+		p2healthHeight = 20;
+		p2healthX = 800;
+		p2healthY = 20;
+		
+		p1HealthBar = new HealthBar(health, p1healthWidth, p1healthHeight, p1healthX, p1healthY, healthColor, playerOne);
+		p2HealthBar = new HealthBar(health, p2healthWidth, p2healthHeight, p2healthX, p2healthY, healthColor, playerTwo);
+		
+		
+//		cupcakeHealth = new Text("Health: " + playerOne.getHealth());
+//		cupcakeHealth.setFill(Color.LIGHTGREEN);
+//		cupcakeHealth.setFont(Font.font(java.awt.Font.SERIF, 25));
+//		cupcakeHealth.setX(50);
+//		cupcakeHealth.setY(30);
+//
+//		iceCreamHealth = new Text("Health: " + playerTwo.getHealth());
+//		iceCreamHealth.setFill(Color.MAROON);
+//		iceCreamHealth.setFont(Font.font(java.awt.Font.SERIF, 25));
+//		iceCreamHealth.setX(650);
+//		iceCreamHealth.setY(30);
+
+=======
 		scene = new Scene(root, 1000, 500);
 		playerOne = new Adventurer(true);
 		playerTwo = new Minotaur(false);
@@ -91,7 +151,12 @@ public class GameEngine extends Application {
 		p2healthWidth = playerTwo.defaultHealth;
 		p2healthHeight = 20;
 		p2healthX = 800;
+<<<<<<< HEAD
 		p2healthY = 40;
+=======
+		p2healthY = 20;
+>>>>>>> branch 'master' of https://rishiskhare@bitbucket.org/2019_p4_group_2/gameproject.git
+>>>>>>> branch 'master' of https://rishiskhare@bitbucket.org/2019_p4_group_2/gameproject.git
 
 		p1HealthBar = new HealthBar(playerOne.defaultHealth, p1healthWidth, p1healthHeight, p1healthX, p1healthY,
 				playerOne);
@@ -109,9 +174,18 @@ public class GameEngine extends Application {
 
 		fWorld.add(playerOne);
 		fWorld.add(playerTwo);
+<<<<<<< HEAD
+		
+//		fWorld.add(cupcakeHealth);
+//		fWorld.add(iceCreamHealth);
+		fWorld.add(p1HealthBar);
+		fWorld.add(p2HealthBar);
+
+=======
 
 		fWorld.add(p1HealthBar);
 		fWorld.add(p2HealthBar);
+>>>>>>> branch 'master' of https://rishiskhare@bitbucket.org/2019_p4_group_2/gameproject.git
 		root.getChildren().add(fWorld);
 		root.setAlignment(fWorld, Pos.CENTER);
 
@@ -231,12 +305,9 @@ public class GameEngine extends Application {
 			if (event.getCode() == KeyCode.O) {
 				fWorld.removeKeyCode(KeyCode.O);
 			}
-			if (event.getCode() == KeyCode.P) {
-				fWorld.removeKeyCode(KeyCode.P);
-			}
-			if (event.getCode() == KeyCode.UP) {
-				fWorld.removeKeyCode(KeyCode.UP);
-			}
+			
+			
+			
 
 		});
 	}
@@ -447,13 +518,48 @@ public class GameEngine extends Application {
 		fWorld.start();
 	}
 
+<<<<<<< HEAD
+	public static void playHurtSound() {
+		Media hurt = new Media(new File("file:resources/hurtSoundEffect.mp3").toURI().toString());
+		sound = new MediaPlayer(hurt);
+		sound.play();
+	}
+
+	public static void playBulletSound() {
+		Media hurt = new Media(new File("file:resources/bulletSoundEffect.mp3").toURI().toString());
+		sound = new MediaPlayer(hurt);
+		sound.play();
+	}
+
+	public static void updatePlayerOneHealth() {
+		Media hurt;
+		if (playerOne.getHealth() > 0) {
+			p1HealthBar.setHealth(playerOne.getHealth());
+		}
+		else {
+			fWorld.remove(p1HealthBar);
+		}
+		if (playerOne.getHealth() <= 0) {
+			hurt = new Media(new File("deathSoundEffect.mp3").toURI().toString());
+		if(playerOne.getHealth() <= 80) {
+			playerOne.powerUp();
+			System.out.println("updated");
+=======
 	public static void updatePlayerOneHealth() {
 		if (playerOne.getHealth() <= 80) {
 			playerOne.playerPowerUp();
+>>>>>>> branch 'master' of https://rishiskhare@bitbucket.org/2019_p4_group_2/gameproject.git
 		}
+<<<<<<< HEAD
+		if (playerOne.getHealth() <= 0&& gameOver) {
+			hurt = new Media(new File("file:resources/deathSoundEffect.mp3").toURI().toString());
+			sound = new MediaPlayer(hurt);
+			sound.play();
+=======
 		if (playerOne.getHealth() <= 0 && gameOver) {
 			//sound.pause();
 			p1HealthBar.setFitWidth(0);
+>>>>>>> branch 'master' of https://rishiskhare@bitbucket.org/2019_p4_group_2/gameproject.git
 			winText = new Text("Player Two Wins");
 			winText.setX(310);
 			winText.setY(200);
@@ -484,13 +590,61 @@ public class GameEngine extends Application {
 			restartBox.setAlignment(Pos.CENTER);
 			root.setCenter(restartBox);
 		}
+		}
 	}
+<<<<<<< HEAD
+
+	public static void updatePlayerTwoHealth() {
+		if (playerTwo.getHealth() > 0) {
+			p2HealthBar.setHealth(playerTwo.getHealth());
+=======
 
 	public static void updatePlayerTwoHealth() {
 		if (playerTwo.getHealth() <= 80 && !playerTwo.poweredUp) {
 			playerTwo.playerPowerUp();
 
+>>>>>>> branch 'master' of https://rishiskhare@bitbucket.org/2019_p4_group_2/gameproject.git
 		}
+<<<<<<< HEAD
+		else {
+			fWorld.remove(p2HealthBar);
+		}
+		
+		if (playerTwo.getHealth() <= 0) {
+			Media hurt = new Media(new File("deathSoundEffect.mp3").toURI().toString());
+			sound = new MediaPlayer(hurt);
+			sound.play();
+			Text winText = new Text("Player One Wins");
+			winText.setX(310);
+			winText.setY(250);
+			winText.setFill(Color.LIGHTGREEN);
+			winText.setFont(Font.font(java.awt.Font.SERIF, 50));
+			if(playerTwo.getDirection()) {
+				playerTwo.setImage("die");
+			}else {
+				playerTwo.setImage("dieLeft");
+
+					playerTwo.setImage("dieLeft");
+				}
+				gameOver = false;
+				playerTwo.setY(225);
+				fWorld.add(winText);
+				fWorld.stop();
+				restartBox = new HBox();
+				ImageView i = new ImageView("file:resources/restartButton.png");
+				restartButton = new Button("",i);
+				restartButton.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent arg0) {
+						restartGame();					
+					}
+				});
+				restartButton.setPrefSize(100,20);
+				restartBox.getChildren().addAll(restartButton);
+				restartBox.setAlignment(Pos.CENTER);
+				root.setCenter(restartBox);
+
+=======
 		if (playerTwo.getHealth() <= 0 && gameOver) {
 			//sound.pause();
 			p2HealthBar.setFitWidth(0);
@@ -506,6 +660,7 @@ public class GameEngine extends Application {
 				playerTwo.setImage("die");
 			} else {
 				playerTwo.setImage("dieLeft");
+>>>>>>> branch 'master' of https://rishiskhare@bitbucket.org/2019_p4_group_2/gameproject.git
 			}
 			gameOver = false;
 			playerTwo.setY(playerTwo.yPos);

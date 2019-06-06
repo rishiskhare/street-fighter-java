@@ -6,7 +6,6 @@ import javafx.scene.input.KeyCode;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-
 import javafx.scene.image.Image;
 
 
@@ -14,12 +13,18 @@ public class Adventurer extends Player{
 
 	private int speed = 10;
 	private static MediaPlayer sound = null;
+<<<<<<< HEAD
 	static String path = Adventurer.class.getClassLoader().getResource("resources/adventureSpritesheet.png").toString();
 	
 	public Adventurer(Boolean playerNum) {
 		super(100, 6, 3, path, true, 8);
 		
 		
+=======
+	
+	public Adventurer(Boolean playerNum) {
+		super(100,6,3,"resources/adventureSpritesheet.png", true,8);
+>>>>>>> branch 'master' of https://rishiskhare@bitbucket.org/2019_p4_group_2/gameproject.git
 		xPos = 200;
 		yPos = 250;
 		groundHeight = yPos;
@@ -148,7 +153,16 @@ public class Adventurer extends Player{
 		sound.play();	
 	}
 	//POWER UPS
+<<<<<<< HEAD
 	
+=======
+	public void playerPowerUp() {	
+		poweredUp = true;
+		projectileImage = "resources/PowerUp.png";
+		leftProjectileImage = "resources/PowerUpLeft.png";
+		setProjectileDamage(8);
+	}
+>>>>>>> branch 'master' of https://rishiskhare@bitbucket.org/2019_p4_group_2/gameproject.git
 	public void playerPowerDown() {
 		poweredUp = false;
 		setProjectileDamage(3);
