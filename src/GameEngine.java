@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -29,6 +30,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -46,7 +48,10 @@ public class GameEngine extends Application {
 	public static BorderPane root;
 	static HBox restartBox;
 	static Text winText;
-
+	private static MenuBar menuBar;
+	private static MenuItem instructions;
+	private static WebView web;
+	private static Menu help;
 	private static HealthBar p1HealthBar;
 	private static HealthBar p2HealthBar;
 	private double p1healthX;
@@ -81,17 +86,19 @@ public class GameEngine extends Application {
 		p1healthWidth = playerOne.defaultHealth;
 		p1healthHeight = 20;
 		p1healthX = 20;
-		p1healthY = 20;
+		p1healthY = 40;
 
 		p2healthWidth = playerTwo.defaultHealth;
 		p2healthHeight = 20;
 		p2healthX = 800;
-		p2healthY = 20;
+		p2healthY = 40;
 
 		p1HealthBar = new HealthBar(playerOne.defaultHealth, p1healthWidth, p1healthHeight, p1healthX, p1healthY,
 				playerOne);
+		p1HealthBar.setColor(Color.rgb(80, 244, 66));
 		p2HealthBar = new HealthBar(playerTwo.defaultHealth, p2healthWidth, p2healthHeight, p2healthX, p2healthY,
 				playerTwo);
+		p2HealthBar.setColor(Color.rgb(0, 255, 250));
 
 		Image image = new Image("resources/ArenaBackground.jpg");
 		ImageView backgroundImageView = new ImageView(image);
@@ -112,6 +119,12 @@ public class GameEngine extends Application {
 		HBox menuBox = new HBox(10);
 		Menu characterMenu = new Menu("Choose Characters");
 		MenuBar menuBar = new MenuBar();
+		help = new Menu("Help");
+		instructions = new MenuItem("How to Play");
+        //menuhandLER
+		instructions.setOnAction(new MenuHandler());
+        help.getItems().addAll(instructions);
+        menuBar.getMenus().addAll(help);
 		MenuItem choosePlayerOne = new MenuItem("Choose Player One Character");
 		choosePlayerOne.setOnAction((new EventHandler<ActionEvent>() {
 			@Override
@@ -403,7 +416,7 @@ public class GameEngine extends Application {
 	}
 
 	public static void restartGame() {
-		sound.play();
+		//sound.play();
 		playerOne.setX(200);
 		playerOne.setY(playerOne.yPos);
 		playerTwo.setX(600);
@@ -439,14 +452,14 @@ public class GameEngine extends Application {
 			playerOne.playerPowerUp();
 		}
 		if (playerOne.getHealth() <= 0 && gameOver) {
-			sound.pause();
+			//sound.pause();
 			p1HealthBar.setFitWidth(0);
 			winText = new Text("Player Two Wins");
 			winText.setX(310);
 			winText.setY(200);
 			winText.setFill(Color.MAROON);
 			winText.setFont(Font.font(java.awt.Font.SERIF, 50));
-			playerOne.playDeathSound();
+			//playerOne.playDeathSound();
 			if (playerOne.getDirection()) {
 				playerOne.setImage("die");
 			} else {
@@ -479,7 +492,7 @@ public class GameEngine extends Application {
 
 		}
 		if (playerTwo.getHealth() <= 0 && gameOver) {
-			sound.pause();
+			//sound.pause();
 			p2HealthBar.setFitWidth(0);
 			winText = new Text("Player One Wins");
 			winText.setX(310);
@@ -488,7 +501,7 @@ public class GameEngine extends Application {
 			winText.setFont(Font.font(java.awt.Font.SERIF, 50));
 			fWorld.add(winText);
 			fWorld.stop();
-			playerTwo.playDeathSound();
+			//playerTwo.playDeathSound();
 			if (playerTwo.getDirection()) {
 				playerTwo.setImage("die");
 			} else {
@@ -510,6 +523,27 @@ public class GameEngine extends Application {
 			restartBox.setAlignment(Pos.CENTER);
 			root.setCenter(restartBox);
 		}
+		
+		
+		
+	}
+	
+	private class MenuHandler implements EventHandler<ActionEvent>{
+
+		@Override
+		public void handle(ActionEvent event) {
+			if(event.getSource() == instructions) {
+				ScrollPane pane = new ScrollPane();
+				web = new WebView();
+				String path = getClass().getResource("resources/Instructions.html").toString();
+				web.getEngine().load(path);
+				pane.setContent(web);
+				Stage s = new Stage();
+				Scene scene = new Scene(web);
+				s.setScene(scene);
+				s.show();
+			}
+		}
+		
 	}
 }
-//do cyclops

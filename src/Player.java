@@ -39,6 +39,7 @@ public class Player extends Actor implements Fighter{
 	@Override
 	void act(long now) {
 	}
+	
 	void setImage(String image) {		
 	}
 	void playAttackSound() {		
@@ -56,7 +57,7 @@ public class Player extends Actor implements Fighter{
 	}
 	@Override
 	public void attack() {
-	playAttackSound();
+	//playAttackSound();
 	Player player = getOneIntersectingObject(Player.class);
 	if(direction) {
 		setImage("attack");
@@ -88,7 +89,7 @@ public class Player extends Actor implements Fighter{
 
 	@Override
 	public void shoot() {
-		playShootingSound();
+		//playShootingSound();
 		if(direction) {
 			setImage("shoot");
 		}else {
@@ -124,7 +125,7 @@ public class Player extends Actor implements Fighter{
     	
 	}
 	public void jump(){
-		playJumpSound();
+		//playJumpSound();
 		setHurt(false);
 		if(direction) {
 			setImage("jump");

@@ -14,9 +14,10 @@ public class Santa extends Player{
 
 	private int speed = 6;
 	private static MediaPlayer sound = null;
-	
+	static String path = Santa.class.getClassLoader().getResource("resources/santaSpritesheet.png").toString();
+
 	public Santa(Boolean playerNum) {
-		super(125,4,6,"resources/santaSpritesheet.png", true,6);
+		super(125, 4, 6, path, true, 6);
 		xPos = 200;
 		yPos = 275;
 		groundHeight = yPos;
@@ -95,7 +96,6 @@ public class Santa extends Player{
 	        	if(getY()>=groundHeight&&!getWorld().isKeyDown(KeyCode.O)&&!getWorld().isKeyDown(KeyCode.P)) {
 	        		setImage("runLeft");
 	        	}
-	        	System.out.println("run");
 	        	move(-speed,0); 
 	        	setHurt(false);
 	        	setDirection(false);
@@ -149,68 +149,81 @@ public class Santa extends Player{
 		speed = 8;
 		jumpDy = 8;
 		setProjectileDamage(8);
+		setImage("powerUp");
 	}
 	public void playerPowerDown() {
 		poweredUp = false;
 		speed = 6;
 		jumpDy = 6;
 		setProjectileDamage(6);
+		String path = getClass().getClassLoader().getResource("resources/santaSpritesheet.png").toString();
+		Image image = new Image(path);
+		this.setImage(image);
+		this.setViewport(new Rectangle2D(0, 1015, 150, 145));
 	}
 	
 	@Override
 	public void setImage(String str) {
-		switch (str) {
-		case "idle":
-			this.setViewport(new Rectangle2D(0, 1015, 150, 145));
-			break;
-		case "idleLeft":
-			this.setViewport(new Rectangle2D(0, 870, 150, 145));
-			break;
-		case "jump":
-			this.setViewport(new Rectangle2D(0, 1305, 150, 145));
-			break;
-		case "jumpLeft":
-			this.setViewport(new Rectangle2D(0, 1160, 150, 145));
-			break;
-		case "attack":
-			this.setViewport(new Rectangle2D(0, 0, 150, 145));
-			break;
-		case "attackLeft":
-			this.setViewport(new Rectangle2D(0, 145, 150, 145));
-			break;
-		case "die":
-			this.setViewport(new Rectangle2D(0, 435, 150, 145));
-			break;
-		case "dieLeft":
-			this.setViewport(new Rectangle2D(0, 290, 150, 145));
-			break;
-		case "run":
-			this.setViewport(new Rectangle2D(0, 1595, 150, 145));
-			break;
-		case "runLeft":
-			this.setViewport(new Rectangle2D(0, 1450, 150, 145));
-			break;
-		case "shoot":
-			this.setViewport(new Rectangle2D(0, 1885, 150, 145));
-			break;
-		case "shootLeft":
-			this.setViewport(new Rectangle2D(0, 1740, 150, 145));
-			break;
-		case "hurt":
-			this.setViewport(new Rectangle2D(0, 725, 150, 145));
-			break;
-		case "hurtLeft":
-			this.setViewport(new Rectangle2D(0, 580, 150, 145));
-			break;
-		case "powerUp":
-			System.out.println("powered up");
-			break;
-		case "powerUpLeft":
-			System.out.println("powered up(L)");
+		if(this.getImage().impl_getUrl().contentEquals(Player.class.getClassLoader().getResource("resources/santaSpritesheet.png").toString())) {
+			switch (str) {
+			case "idle":
+				this.setViewport(new Rectangle2D(0, 1015, 150, 145));
+				break;
+			case "idleLeft":
+				this.setViewport(new Rectangle2D(0, 870, 150, 145));
+				break;
+			case "jump":
+				this.setViewport(new Rectangle2D(0, 1305, 150, 145));
+				break;
+			case "jumpLeft":
+				this.setViewport(new Rectangle2D(0, 1160, 150, 145));
+				break;
+			case "attack":
+				this.setViewport(new Rectangle2D(0, 0, 150, 145));
+				break;
+			case "attackLeft":
+				this.setViewport(new Rectangle2D(0, 145, 150, 145));
+				break;
+			case "die":
+				this.setViewport(new Rectangle2D(0, 435, 150, 145));
+				break;
+			case "dieLeft":
+				this.setViewport(new Rectangle2D(0, 290, 150, 145));
+				break;
+			case "run":
+				this.setViewport(new Rectangle2D(0, 1595, 150, 145));
+				break;
+			case "runLeft":
+				this.setViewport(new Rectangle2D(0, 1450, 150, 145));
+				break;
+			case "shoot":
+				this.setViewport(new Rectangle2D(0, 1885, 150, 145));
+				break;
+			case "shootLeft":
+				this.setViewport(new Rectangle2D(0, 1740, 150, 145));
+				break;
+			case "hurt":
+				this.setViewport(new Rectangle2D(0, 725, 150, 145));
+				break;
+			case "hurtLeft":
+				this.setViewport(new Rectangle2D(0, 580, 150, 145));
+				break;
+			case "powerUp":
+				String path = getClass().getClassLoader().getResource("resources/SantaPowerUp.png").toString();
+				Image image = new Image(path);
+				this.setImage(image);
+				this.setViewport(null);
+				break;			
+			}
 			
-
-			break;
+		}else if  (this.getImage().impl_getUrl().contentEquals(Player.class.getClassLoader().getResource("resources/SantaPowerUp.png").toString())){
+			String path = getClass().getClassLoader().getResource("resources/SantaPowerUp.png").toString();
+			Image image = new Image(path);
+			this.setImage(image);
+			this.setViewport(null);
+			
 		}
+			
 	}
 
   }

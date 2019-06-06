@@ -14,15 +14,18 @@ public class Adventurer extends Player{
 
 	private int speed = 10;
 	private static MediaPlayer sound = null;
+	static String path = Adventurer.class.getClassLoader().getResource("resources/adventureSpritesheet.png").toString();
 	
 	public Adventurer(Boolean playerNum) {
-		super(100,6,3,"resources/adventureSpritesheet.png", true,8);
+		super(100, 6, 3, path, true, 8);
+		
+		
 		xPos = 200;
 		yPos = 250;
 		groundHeight = yPos;
 		defaultHealth = 100;
-		projectileImage = "resources/Aircutter.png";
-		leftProjectileImage = "resources/Aircutter-left.png";
+		projectileImage = getClass().getClassLoader().getResource("resources/Aircutter.png").toString();
+		leftProjectileImage = getClass().getClassLoader().getResource("resources/Aircutter-left.png").toString();
 		setImage("idle");
 		setX(xPos);
 		setY(yPos);
@@ -145,66 +148,111 @@ public class Adventurer extends Player{
 		sound.play();	
 	}
 	//POWER UPS
-	public void playerPowerUp() {	
-		poweredUp = true;
-		projectileImage = "resources/PowerUp.png";
-		leftProjectileImage = "resources/PowerUpLeft.png";
-		setProjectileDamage(8);
-	}
+	
 	public void playerPowerDown() {
 		poweredUp = false;
 		setProjectileDamage(3);
-		projectileImage = "resources/Aircutter.png";
-		leftProjectileImage = "resources/Aircutter-left.png";
+		projectileImage = getClass().getClassLoader().getResource("resources/Aircutter.png").toString();
+		leftProjectileImage = getClass().getClassLoader().getResource("resources/Aircutter-left.png").toString();
+		setImage("powerDown");
 	}
 	
+	public void playerPowerUp() {
+		poweredUp = true;
+		speed = 12;
+		setMeleeDamage(50);
+		if (getDirection()) {
+			setImage("UpdatedPlayer1Right");
+		} else {
+			setImage("UpdatedPlayer1LeftCopy");
+		}
+
+	}
+
+
 	@Override
 	public void setImage(String str) {
-		switch (str) {
-		case "idle":
-			this.setViewport(new Rectangle2D(0, 1015, 150, 145));
-			break;
-		case "idleLeft":
-			this.setViewport(new Rectangle2D(0, 870, 150, 145));
-			break;
-		case "jump":
-			this.setViewport(new Rectangle2D(0, 1305, 150, 145));
-			break;
-		case "jumpLeft":
-			this.setViewport(new Rectangle2D(0, 1160, 150, 145));
-			break;
-		case "attack":
-			this.setViewport(new Rectangle2D(0, 0, 150, 145));
-			break;
-		case "attackLeft":
-			this.setViewport(new Rectangle2D(0, 145, 150, 145));
-			break;
-		case "die":
-			this.setViewport(new Rectangle2D(0, 435, 150, 145));
-			break;
-		case "dieLeft":
-			this.setViewport(new Rectangle2D(0, 290, 150, 145));
-			break;
-		case "run":
-			this.setViewport(new Rectangle2D(0, 1595, 150, 145));
-			break;
-		case "runLeft":
-			this.setViewport(new Rectangle2D(0, 1450, 150, 145));
-			break;
-		case "shoot":
-			this.setViewport(new Rectangle2D(0, 1885, 150, 145));
-			break;
-		case "shootLeft":
-			this.setViewport(new Rectangle2D(0, 1740, 150, 145));
-			break;
-		case "hurt":
-			this.setViewport(new Rectangle2D(0, 725, 150, 145));
-			break;
-		case "hurtLeft":
-			this.setViewport(new Rectangle2D(0, 580, 150, 145));
-			break;
+		if(this.getImage().impl_getUrl().contentEquals(Player.class.getClassLoader().getResource("resources/adventureSpritesheet.png").toString())) {
+			switch (str) {
+			case "attack":
+				this.setViewport(new Rectangle2D(0, 0, 150, 145));
+				break;
+			case "attackLeft":
+				this.setViewport(new Rectangle2D(0, 145, 150, 145));
+				break;
+			case "dieLeft":
+				this.setViewport(new Rectangle2D(0, 290, 150, 145));
+				break;
+			case "die":
+				this.setViewport(new Rectangle2D(0, 435, 150, 145));
+				break;
+			case "hurt":
+				this.setViewport(new Rectangle2D(0, 580, 150, 145));
+				break;
+			case "hurtLeft":
+				this.setViewport(new Rectangle2D(0, 725, 150, 145));
+				break;
+			case "idle":
+				this.setViewport(new Rectangle2D(0, 870, 150, 145));
+				break;
+			case "idleLeft":
+				this.setViewport(new Rectangle2D(0, 1015, 150, 145));
+				break;
+			case "jumpLeft":
+				this.setViewport(new Rectangle2D(0, 1160, 150, 145));
+				break;
+			case "jump":
+				this.setViewport(new Rectangle2D(0, 1305, 150, 145));
+				break;
+			case "runLeft":
+				this.setViewport(new Rectangle2D(0, 1450, 150, 145));
+				break;
+			case "run":
+				this.setViewport(new Rectangle2D(0, 1595, 150, 145));
+				break;
+			case "shoot":
+				this.setViewport(new Rectangle2D(0, 1885, 150, 145));
+				break;
+			case "shootLeft":
+				this.setViewport(new Rectangle2D(0, 1740, 150, 145));
+				break;
+			case "UpdatedPlayer1LeftCopy":
+				String accessLeft = getClass().getClassLoader().getResource("resources/UpdatedPlayer1LeftCopy.png").toString();
+				Image imageLeft = new Image(accessLeft);
+				this.setImage(imageLeft);
+				this.setViewport(null);
+				break;
+			case "UpdatedPlayer1Right":
+				String accessRight = getClass().getClassLoader().getResource("resources/UpdatedPlayer1Right.png").toString();
+				Image imageRight = new Image(accessRight);
+				this.setImage(imageRight);
+				this.setViewport(null);
+				break;
+			}
+		} else if (this.getImage().impl_getUrl().contentEquals(Player.class.getClassLoader().getResource("resources/UpdatedPlayer1Right.png").toString()) || this.getImage().impl_getUrl().contentEquals(Player.class.getClassLoader().getResource("resources/UpdatedPlayer1LeftCopy.png").toString())){
+			switch(str) {
+			case "run":
+				String accessRight = getClass().getClassLoader().getResource("resources/UpdatedPlayer1Right.png").toString();
+				Image imageRight = new Image(accessRight);
+				this.setImage(imageRight);
+				this.setViewport(null);
+				break;
+			case "runLeft":
+				String accessLeft = getClass().getClassLoader().getResource("resources/UpdatedPlayer1LeftCopy.png").toString();
+				Image imageLeft = new Image(accessLeft);
+				this.setImage(imageLeft);
+				this.setViewport(null);
+				break;
+			case "powerDown":
+				String path = Player.class.getClassLoader().getResource("resources/adventureSpritesheet.png").toString();
+				Image pathImage = new Image(path);
+				this.setImage(pathImage);
+				this.setViewport(new Rectangle2D(0, 870, 150, 145));
+				break;
+			}
 		}
 	}
+
 
   }
 
