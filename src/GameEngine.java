@@ -191,6 +191,11 @@ public class GameEngine extends Application {
 			if (event.getCode() == KeyCode.UP) {
 				fWorld.removeKeyCode(KeyCode.UP);
 			}
+			if (event.getCode() != KeyCode.UP) {
+				fWorld.removeKeyCode(KeyCode.UP);
+			}
+			
+			
 
 		});
 
