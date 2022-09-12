@@ -1,14 +1,6 @@
-<<<<<<< HEAD
 import java.io.File;
 import javafx.scene.paint.Color;
 import java.util.TimerTask;
-=======
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TimerTask;
->>>>>>> branch 'master' of https://rishiskhare@bitbucket.org/2019_p4_group_2/gameproject.git
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
